@@ -1,0 +1,24 @@
+# Jangan unggah sumber / metadata ke CDN publik
+.git
+.git/**
+.github
+.github/**
+.wrangler
+.wrangler/**
+node_modules
+node_modules/**
+worker
+worker/**
+scripts
+scripts/**
+*.mjs
+wrangler.jsonc
+wrangler.toml
+.gitignore
+.assetsignore
+.DS_Store
+CONTRIBUTING.md
+LICENSE
+README.md
+package.json
+package-lock.json

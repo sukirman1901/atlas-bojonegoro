@@ -123,8 +123,8 @@ function rateLimited(ip) {
   return false;
 }
 
-function looksLikePath(path) {
-  return path === "/" || path === "/api/lapor";
+function isLaporPath(path) {
+  return path === "/api/lapor";
 }
 
 function validHttpUrl(value) {
@@ -252,18 +252,32 @@ async function handlePost(request, env) {
 export default {
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
+
+    if (isLaporPath(path)) {
+      if (request.method === "OPTIONS") {
+        return withCors(new Response(null, { status: 204 }), request, env);
+      }
+      if (request.method === "GET") {
+        return withCors(json({ ok: true, service: "atlas-lapor" }, 200), request, env);
+      }
+      if (request.method === "POST") {
+        return withCors(await handlePost(request, env), request, env);
+      }
+      return withCors(json({ error: "Metode tidak diizinkan." }, 405), request, env);
+    }
+
+    // Situs statis (index.html, app.js, data/…) via Assets binding.
+    if (env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+
+    // Worker Lapor berdiri sendiri (tanpa Assets).
     if (request.method === "OPTIONS") {
       return withCors(new Response(null, { status: 204 }), request, env);
     }
-    if (!looksLikePath(path)) {
-      return withCors(json({ error: "Tidak ditemukan." }, 404), request, env);
-    }
-    if (request.method === "GET") {
+    if (request.method === "GET" && path === "/") {
       return withCors(json({ ok: true, service: "atlas-lapor" }, 200), request, env);
     }
-    if (request.method === "POST") {
-      return withCors(await handlePost(request, env), request, env);
-    }
-    return withCors(json({ error: "Metode tidak diizinkan." }, 405), request, env);
+    return withCors(json({ error: "Tidak ditemukan." }, 404), request, env);
   },
 };

@@ -47,14 +47,15 @@ Laporan yang sudah diproses ada di [`data/laporan.json`](data/laporan.json).
 
 ## Kirim laporan (Cloudflare Worker)
 
-1. Di dashboard Cloudflare, buka Worker yang sudah ada (atau `npx wrangler deploy` dari folder `worker/`).
-2. Tempel isi [`worker/index.js`](worker/index.js) ke Worker, atau deploy lewat Wrangler.
-3. **Settings → Variables:** `GITHUB_REPO` = `sukirman1901/atlas-bojonegoro`, `ALLOWED_ORIGINS` = origin situs (contoh `https://domain-anda` plus `http://127.0.0.1:8765` untuk uji lokal).
-4. **Secret:** `GITHUB_TOKEN` — token GitHub dengan izin tulis isu di repo itu saja (`wrangler secret put GITHUB_TOKEN` atau Encrypt di dashboard).
-5. Pasang **Custom Domain** atau **Route** `domain-anda/api/lapor*` ke Worker ini. Form mengirim ke `/api/lapor`.
-6. Kalau Worker masih di `*.workers.dev`, ubah `laporEndpoint` di [`data/config.mjs`](data/config.mjs) ke URL penuh itu, lalu `node scripts/build.mjs`.
+Deploy Git ke Workers memakai `wrangler.jsonc` di akar repo: situs + `POST /api/lapor` dalam satu Worker (`atlas-bojonegoro`).
 
-Tanpa token, tombol Kirim laporan tetap ada; server menolak dengan pesan yang bisa dibaca.
+1. Di dashboard Worker **atlas-bojonegoro** → **Settings → Variables**:
+   - `GITHUB_REPO` = `sukirman1901/atlas-bojonegoro` (sudah di `wrangler.jsonc`)
+   - `ALLOWED_ORIGINS` = URL publik situs (contoh `https://atlas-bojonegoro.sukirman1901.workers.dev` dan domain kustom Anda)
+2. **Secret:** `GITHUB_TOKEN` — token GitHub dengan izin tulis isu di repo itu saja (Encrypt di dashboard).
+3. Domain kustom: pasang di Worker/Pages project yang sama. Jangan unggah ulang dengan `assets.directory = "."` tanpa [`.assetsignore`](.assetsignore) — file `.git` tidak boleh publik.
+
+`.assetsignore` memastikan `.git`, `worker/`, dan sumber `*.mjs` tidak ikut ke CDN.
 
 Field, status verifikasi, dan alur masuk data: komentar di kepala `data/isu.mjs` dan [CONTRIBUTING.md](CONTRIBUTING.md).
 
