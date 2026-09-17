@@ -886,6 +886,8 @@ html[data-theme="dark"] input[type="search"]::-webkit-search-cancel-button:hover
 .map-layout { display: grid; gap: 0.65rem; }
 .map-stage {
   position: relative;
+  z-index: 1;
+  isolation: isolate;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -895,7 +897,7 @@ html[data-theme="dark"] input[type="search"]::-webkit-search-cancel-button:hover
   position: absolute;
   top: 0.65rem;
   right: 0.65rem;
-  z-index: 1000;
+  z-index: 500;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -908,6 +910,7 @@ html[data-theme="dark"] input[type="search"]::-webkit-search-cancel-button:hover
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  pointer-events: auto;
 }
 .map-basemap .btn {
   min-height: 1.85rem;
