@@ -196,24 +196,56 @@ async function createIssue(env, payload) {
   if (!repo || !token) {
     return { error: "Layanan kirim belum disetel.", status: 503 };
   }
-  const res = await fetch(`https://api.github.com/repos/${repo}/issues`, {
+
+  const headers = {
+    accept: "application/vnd.github+json",
+    authorization: `Bearer ${token}`,
+    "content-type": "application/json",
+    "x-github-api-version": "2022-11-28",
+    "user-agent": "atlas-bojonegoro-lapor",
+  };
+  const base = {
+    title: issueTitle(payload),
+    body: issueBody(payload),
+  };
+
+  let res = await fetch(`https://api.github.com/repos/${repo}/issues`, {
     method: "POST",
-    headers: {
-      accept: "application/vnd.github+json",
-      authorization: `Bearer ${token}`,
-      "content-type": "application/json",
-      "x-github-api-version": "2022-11-28",
-      "user-agent": "atlas-bojonegoro-lapor",
-    },
-    body: JSON.stringify({
-      title: issueTitle(payload),
-      body: issueBody(payload),
-      labels: ["lapor"],
-    }),
+    headers,
+    body: JSON.stringify({ ...base, labels: ["lapor"] }),
   });
-  if (!res.ok) {
-    return { error: "Laporan belum masuk antrian. Kirim ulang beberapa saat lagi.", status: 502 };
+
+  // Label belum ada / token tidak boleh set label → coba tanpa label.
+  if (res.status === 422) {
+    res = await fetch(`https://api.github.com/repos/${repo}/issues`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(base),
+    });
   }
+
+  if (!res.ok) {
+    let detail = "";
+    try {
+      const errBody = await res.json();
+      detail = typeof errBody.message === "string" ? errBody.message : "";
+    } catch {
+      detail = "";
+    }
+    if (res.status === 401 || res.status === 403) {
+      return { error: "Token GitHub ditolak. Cek GITHUB_TOKEN (Secret) dan izin Issues.", status: 502 };
+    }
+    if (res.status === 404) {
+      return { error: "Repo tidak ditemukan atau token tidak punya akses.", status: 502 };
+    }
+    return {
+      error: detail
+        ? `Laporan belum masuk antrian (${res.status}): ${detail}`
+        : "Laporan belum masuk antrian. Kirim ulang beberapa saat lagi.",
+      status: 502,
+    };
+  }
+
   const data = await res.json();
   return {
     issueUrl: typeof data.html_url === "string" ? data.html_url : null,
