@@ -2,7 +2,7 @@
 
 Situs publik untuk melihat isu urusan publik di Kabupaten Bojonegoro — di peta, di daftar, dan per kecamatan.
 
-Isinya disusun manusia dari sumber terbuka, lalu ditata agar mudah disaring dan dicek ulang. Bukan umpan berita otomatis, bukan kanal darurat atau laporan polisi.
+Fokus inventaris: **isu satu bulan terakhir**. Isinya disusun manusia dari sumber terbuka, lalu ditata agar mudah disaring dan dicek ulang. Bukan umpan berita otomatis, bukan kanal darurat atau laporan polisi.
 
 **Situs:** [atlas.nusaiba.dev](https://atlas.nusaiba.dev/)  
 **Repo:** [sukirman1901/atlas-bojonegoro](https://github.com/sukirman1901/atlas-bojonegoro)

@@ -33,10 +33,12 @@
 export const META = {
   judul: "Atlas Bojonegoro",
   subjudul: "Inventaris isu & pemantauan urusan publik Kabupaten Bojonegoro",
-  periode: "10 Maret – 18 September 2026",
-  disusun: "17 September 2026",
-  cakupan: "Inventaris rentang Maret–September 2026: 13 isu bertanggal kejadian, 2 agenda terjadwal, 31 tanpa tanggal pasti. 10 dari 47 isu punya tautan sumber langsung.",
-  catatanMetode: "Sumber terbuka (media lokal & nasional + media sosial). Item tanpa keputusan resmi ditandai 'Tuduhan', bukan fakta. Kolom nilai hanya memuat angka yang benar-benar disebut sumber (jenis_nilai: kerugian/harga/aset) — angka dengan satuan berbeda tidak boleh dijumlahkan. Kolom kecamatan berupa daftar karena satu isu bisa mencakup beberapa kecamatan."
+  periode: "satu bulan terakhir",
+  disusun: "18 September 2026",
+  cakupan:
+    "Inventaris bergulir: fokus isu dalam satu bulan terakhir berdasarkan tanggal kejadian (atau terjadwal); bila tanggal pasti belum ada, memakai tanggal entri yang sudah diverifikasi.",
+  catatanMetode:
+    "Sumber terbuka (media lokal & nasional + media sosial). Item tanpa keputusan resmi ditandai 'Tuduhan', bukan fakta. Kolom nilai hanya memuat angka yang benar-benar disebut sumber (jenis_nilai: kerugian/harga/aset) — angka dengan satuan berbeda tidak boleh dijumlahkan. Kolom kecamatan berupa daftar karena satu isu bisa mencakup beberapa kecamatan.",
 };
 
 export const ISU = [
