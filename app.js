@@ -851,7 +851,9 @@
   }
 
   function laporFailCopy(status, serverError) {
-    if (status === 400 && serverError) return serverError;
+    if (serverError && (status === 400 || status === 401 || status === 403 || status === 502 || status === 503)) {
+      return serverError;
+    }
     if (status === 404) return "Layanan kirim belum terpasang di alamat ini.";
     if (status === 429) return "Terlalu banyak kiriman. Coba lagi nanti. Isian Anda masih ada.";
     if (status === 503) return "Layanan kirim belum disetel di Worker.";
