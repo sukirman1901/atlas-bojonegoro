@@ -39,3 +39,9 @@ Maintainer:
 ## Kode
 
 Tetap vanilla: `public/index.html` + `public/js/app.js` + `public/data/*.js` hasil build. Jangan pindah ke Next/React tanpa diskusi. Warna hanya untuk encoding data; jangan tambah pustaka ikon.
+
+Struktur ringkas: `public/` (yang di-serve), `data/` (sumber editorial), `scripts/`, `worker/` (`POST /api/lapor`).
+
+## Deploy (maintainer)
+
+Worker Cloudflare `atlas-bojonegoro` memakai `wrangler.jsonc` (`assets.directory = public`). Di dashboard: set `ALLOWED_ORIGINS`, secret `GITHUB_TOKEN`, dan domain kustom bila perlu. Detail variabel ada di `wrangler.jsonc`.
