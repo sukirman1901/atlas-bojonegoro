@@ -6,6 +6,16 @@ Data dimasukkan orang ke repositori ini. Situsnya tidak menarik berita atau medi
 
 [sukirman1901/atlas-bojonegoro](https://github.com/sukirman1901/atlas-bojonegoro)
 
+## Struktur
+
+```text
+public/          # yang di-serve (HTML, CSS, JS, ikon, data runtime)
+data/            # sumber editorial (isu.mjs, kecamatan, laporan)
+scripts/         # build + server lokal
+worker/          # Cloudflare Worker (POST /api/lapor)
+wrangler.jsonc
+```
+
 ## Apa yang bisa dibuka
 
 - **Peta** — warna wilayah mengikuti jumlah isu. Klik kecamatan untuk menyaring daftar.
@@ -24,22 +34,23 @@ Perlu Node.js 18+. Peta gagal memuat batas wilayah kalau dibuka lewat `file://`.
 git clone https://github.com/sukirman1901/atlas-bojonegoro.git
 cd atlas-bojonegoro
 node scripts/build.mjs
-python3 -m http.server 4173
+node scripts/dev.mjs
 ```
 
 Lalu buka [http://127.0.0.1:4173/](http://127.0.0.1:4173/).
 
-Supaya tombol **Kirim laporan** punya penerima di komputer yang sama:
+Tanpa `GITHUB_TOKEN` di lingkungan, kiriman Lapor ditolak dengan pesan — bukan unduh JSON.
+
+Alternatif statis murni (tanpa `/api/lapor`):
 
 ```bash
-node scripts/dev.mjs
+node scripts/build.mjs
+python3 -m http.server 4173 --directory public
 ```
-
-Tanpa `GITHUB_TOKEN` di lingkungan, kiriman ditolak dengan pesan — bukan unduh JSON.
 
 ## Data
 
-Sunting [`data/isu.mjs`](data/isu.mjs), lalu jalankan `node scripts/build.mjs`. Jangan sunting `data/isu.js`: itu hasil generate.
+Sunting [`data/isu.mjs`](data/isu.mjs), lalu jalankan `node scripts/build.mjs`. Output runtime ada di `public/data/` (`isu.js` dll). Jangan sunting `public/data/isu.js` langsung.
 
 Nama kecamatan harus sama dengan [`data/kecamatan.json`](data/kecamatan.json). Batas peta dari [Badan Informasi Geospasial](https://www.big.go.id/) (`WADMKK=Bojonegoro`). Nama `Sumberejo` diseragamkan ke **Sumberrejo**.
 
@@ -47,15 +58,13 @@ Laporan yang sudah diproses ada di [`data/laporan.json`](data/laporan.json).
 
 ## Kirim laporan (Cloudflare Worker)
 
-Deploy Git ke Workers memakai `wrangler.jsonc` di akar repo: situs + `POST /api/lapor` dalam satu Worker (`atlas-bojonegoro`).
+Deploy Git ke Workers memakai `wrangler.jsonc` di akar repo: situs dari `public/` + `POST /api/lapor` dalam satu Worker (`atlas-bojonegoro`).
 
 1. Di dashboard Worker **atlas-bojonegoro** → **Settings → Variables**:
    - `GITHUB_REPO` = `sukirman1901/atlas-bojonegoro` (sudah di `wrangler.jsonc`)
-   - `ALLOWED_ORIGINS` = URL publik situs (contoh `https://atlas-bojonegoro.sukirman1901.workers.dev` dan domain kustom Anda)
+   - `ALLOWED_ORIGINS` = URL publik situs (contoh `https://atlas.nusaiba.dev`)
 2. **Secret:** `GITHUB_TOKEN` — token GitHub dengan izin tulis isu di repo itu saja (Encrypt di dashboard).
-3. Domain kustom: pasang di Worker/Pages project yang sama. Jangan unggah ulang dengan `assets.directory = "."` tanpa [`.assetsignore`](.assetsignore) — file `.git` tidak boleh publik.
-
-`.assetsignore` memastikan `.git`, `worker/`, dan sumber `*.mjs` tidak ikut ke CDN.
+3. Domain kustom: pasang di Worker yang sama.
 
 Field, status verifikasi, dan alur masuk data: komentar di kepala `data/isu.mjs` dan [CONTRIBUTING.md](CONTRIBUTING.md).
 

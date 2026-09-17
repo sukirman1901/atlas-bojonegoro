@@ -1,0 +1,3 @@
+# Aset di public/ — jangan unggah sumber/metadata ke CDN
+.DS_Store
+*.mjs

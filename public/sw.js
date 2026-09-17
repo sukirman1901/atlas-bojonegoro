@@ -1,18 +1,18 @@
 /* Atlas Bojonegoro — lightweight shell cache. Map tiles & API stay network. */
-const CACHE = "atlas-shell-v5";
+const CACHE = "atlas-shell-v6";
 const PRECACHE = [
   "/",
   "/index.html",
-  "/atlas.css",
-  "/app.js",
+  "/css/atlas.css",
+  "/js/app.js",
   "/manifest.webmanifest",
-  "/favicon.svg",
-  "/favicon-32.png",
-  "/apple-touch-icon.png",
-  "/icon-192.png",
-  "/icon-512.png",
-  "/icon-512-maskable.png",
-  "/og-image.png",
+  "/assets/icons/favicon.svg",
+  "/assets/icons/favicon-32.png",
+  "/assets/icons/apple-touch-icon.png",
+  "/assets/icons/icon-192.png",
+  "/assets/icons/icon-512.png",
+  "/assets/icons/icon-512-maskable.png",
+  "/assets/og/og-image.png",
   "/data/isu.js",
   "/data/geo/bojonegoro-kecamatan.geojson",
 ];
@@ -63,7 +63,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (req.mode === "navigate") {
+  if (url.pathname === "/" || url.pathname === "/index.html") {
     event.respondWith(
       fetch(req)
         .then((res) => {
@@ -71,7 +71,7 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE).then((c) => c.put("/index.html", copy));
           return res;
         })
-        .catch(() => caches.match("/index.html"))
+        .catch(() => matchCache("/index.html"))
     );
     return;
   }
@@ -80,11 +80,10 @@ self.addEventListener("fetch", (event) => {
     matchCache(req).then((cached) => {
       const fetching = fetch(req)
         .then((res) => {
-          if (res && res.ok) {
+          if (res.ok && url.pathname.startsWith("/") && !url.pathname.startsWith("/api/")) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => {
-              c.put(req, copy);
-              if (url.search) c.put(url.pathname, res.clone());
+              c.put(url.pathname, copy);
             });
           }
           return res;

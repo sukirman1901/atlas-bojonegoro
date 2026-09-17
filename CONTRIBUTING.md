@@ -5,9 +5,9 @@ Platform ini menampilkan isu dan menampung laporan. Jangan kirim crawler, scrape
 ## Alur singkat
 
 1. Fork dan cabang dari kerja Anda.
-2. Ubah data di `data/isu.mjs` atau `data/laporan.json`, bukan di `data/isu.js` (berkas itu hasil build).
+2. Ubah data di `data/isu.mjs` atau `data/laporan.json`, bukan di `public/data/isu.js` (berkas itu hasil build).
 3. Jalankan `node scripts/build.mjs`.
-4. Cek tampilan lewat `python3 -m http.server` — Peta, Daftar, Kecamatan (28 baris), Lapor.
+4. Cek tampilan lewat `node scripts/dev.mjs` — Peta, Daftar, Kecamatan (28 baris), Lapor.
 5. Kirim pull request yang menjelaskan sumber dan status verifikasi.
 
 ## Memasukkan isu
@@ -38,4 +38,4 @@ Maintainer:
 
 ## Kode
 
-Tetap vanilla: `index.html` + `app.js` + `data/*.js` hasil build. Jangan pindah ke Next/React tanpa diskusi. Warna hanya untuk encoding data; jangan tambah pustaka ikon.
+Tetap vanilla: `public/index.html` + `public/js/app.js` + `public/data/*.js` hasil build. Jangan pindah ke Next/React tanpa diskusi. Warna hanya untuk encoding data; jangan tambah pustaka ikon.

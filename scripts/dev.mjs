@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import worker from "../worker/index.js";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const publicRoot = join(root, "public");
 const port = Number(process.env.PORT || 4173);
 const origin = `http://127.0.0.1:${port}`;
 const env = {
@@ -19,6 +20,7 @@ const TYPES = {
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".geojson": "application/geo+json",
+  ".webmanifest": "application/manifest+json",
   ".svg": "image/svg+xml",
   ".png": "image/png",
   ".csv": "text/csv; charset=utf-8",
@@ -29,8 +31,8 @@ const TYPES = {
 function safeFile(urlPath) {
   const decoded = decodeURIComponent(urlPath.split("?")[0]);
   const rel = decoded === "/" ? "index.html" : decoded.replace(/^\/+/, "");
-  const full = resolve(root, rel);
-  if (relative(root, full).startsWith("..")) return null;
+  const full = resolve(publicRoot, rel);
+  if (relative(publicRoot, full).startsWith("..")) return null;
   return full;
 }
 

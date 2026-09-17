@@ -5,10 +5,12 @@ import { META, ISU, prioritas, tier } from "../data/isu.mjs";
 import { config } from "../data/config.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outDir = join(__dirname, "..", "data");
+const root = join(__dirname, "..");
+const srcDir = join(root, "data");
+const outDir = join(root, "public", "data");
 
-const kecamatanDoc = JSON.parse(readFileSync(join(outDir, "kecamatan.json"), "utf8"));
-const laporanDoc = JSON.parse(readFileSync(join(outDir, "laporan.json"), "utf8"));
+const kecamatanDoc = JSON.parse(readFileSync(join(srcDir, "kecamatan.json"), "utf8"));
+const laporanDoc = JSON.parse(readFileSync(join(srcDir, "laporan.json"), "utf8"));
 
 const VERIFIKASI_STATUS = new Set([
   "belum",
@@ -106,7 +108,7 @@ for (const r of rows) ver[r.verifikasi_status] = (ver[r.verifikasi_status] || 0)
 console.log(
   `OK  ${rows.length} isu, ${payload.kecamatan.length} kecamatan, ${payload.laporan.length} laporan`
 );
-console.log("    -> isu.json, isu.csv, isu.js, matriks-prioritas.csv");
+console.log("    -> public/data/{isu.json,isu.csv,isu.js,matriks-prioritas.csv}");
 console.log("    tier   :", tiers);
 console.log("    verif  :", ver);
 console.log("    kategori:", kat);

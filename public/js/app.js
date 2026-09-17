@@ -375,7 +375,7 @@
       return;
     }
     try {
-      const res = await fetch("data/geo/bojonegoro-kecamatan.geojson");
+      const res = await fetch("/data/geo/bojonegoro-kecamatan.geojson");
       if (!res.ok) throw new Error("GeoJSON tidak ditemukan");
       geojson = await res.json();
     } catch (err) {
