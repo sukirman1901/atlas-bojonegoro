@@ -10,7 +10,7 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/lapor", "/api/lapor*"]
+    "run_worker_first": ["/api/lapor*"]
   },
   "vars": {
     "GITHUB_REPO": "sukirman1901/atlas-bojonegoro",
