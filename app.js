@@ -52,6 +52,7 @@
     sort: params.get(QK.sort) || "prioritas",
     id: params.get(QK.id) ? Number(params.get(QK.id)) : null,
     matrix: params.get(QK.matrix) === "1",
+    kecQ: "",
   };
 
   const el = {
@@ -70,6 +71,8 @@
     mapSide: document.getElementById("map-side"),
     legend: document.getElementById("map-legend"),
     kecBody: document.getElementById("kec-body"),
+    kecMeta: document.getElementById("kec-meta"),
+    kecQ: document.getElementById("kec-q"),
     laporanDesk: document.getElementById("laporan-desk"),
     form: document.getElementById("form-lapor"),
     laporError: document.getElementById("lapor-error"),
@@ -95,11 +98,33 @@
   let tileLayer = null;
   let geojson = null;
   let mapReady = false;
+  let activeBasemap = "light";
   let laporKecamatan = "";
   let laporKategori = "";
   let laporAbort = null;
   let navHideTimer = 0;
   let drawerHideTimer = 0;
+
+  const BASEMAPS = {
+    light: {
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+      attribution: "Tiles &copy; Esri · batas: BIG",
+      maxZoom: 16,
+      satellite: false,
+    },
+    streets: {
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution: "&copy; OpenStreetMap · batas: BIG",
+      maxZoom: 18,
+      satellite: false,
+    },
+    satellite: {
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      attribution: "Tiles &copy; Esri · batas: BIG",
+      maxZoom: 19,
+      satellite: true,
+    },
+  };
 
   function reduceMotion() {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -220,29 +245,88 @@
       .replace(/"/g, "&quot;");
   }
 
+  function cssVarColor(name) {
+    const probe = document.createElement("span");
+    probe.style.cssText = "position:absolute;left:-9999px;top:0;width:1px;height:1px;pointer-events:none;background:var(" + name + ")";
+    document.body.appendChild(probe);
+    const raw = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    const ctx = document.createElement("canvas").getContext("2d");
+    if (!ctx) return raw;
+    ctx.fillStyle = "#000";
+    ctx.fillStyle = raw;
+    const parsed = ctx.fillStyle;
+    if (parsed.startsWith("#") || parsed.startsWith("rgb")) return parsed;
+    ctx.clearRect(0, 0, 1, 1);
+    ctx.fillStyle = raw;
+    ctx.fillRect(0, 0, 1, 1);
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+    return "rgb(" + r + ", " + g + ", " + b + ")";
+  }
+
   function fillColor(n) {
-    if (!n) return getComputedStyle(document.documentElement).getPropertyValue("--map-0").trim();
-    if (n === 1) return getComputedStyle(document.documentElement).getPropertyValue("--map-1").trim();
-    if (n <= 3) return getComputedStyle(document.documentElement).getPropertyValue("--map-2").trim();
-    if (n <= 6) return getComputedStyle(document.documentElement).getPropertyValue("--map-3").trim();
-    return getComputedStyle(document.documentElement).getPropertyValue("--map-4").trim();
+    if (!n) return cssVarColor("--map-0");
+    if (n === 1) return cssVarColor("--map-1");
+    if (n <= 3) return cssVarColor("--map-2");
+    if (n <= 6) return cssVarColor("--map-3");
+    return cssVarColor("--map-4");
   }
 
   function polyStyle(feature) {
     const nama = feature.properties.nama;
     const n = countFor(nama);
     const selected = state.kec === nama;
+    const css = getComputedStyle(document.documentElement);
+    const fg = css.getPropertyValue("--fg").trim();
+    const bg = css.getPropertyValue("--bg").trim();
+    const sat = BASEMAPS[activeBasemap]?.satellite;
     return {
-      color: getComputedStyle(document.documentElement).getPropertyValue("--fg").trim(),
-      weight: selected ? 2.5 : 1,
-      fillColor: fillColor(n),
-      fillOpacity: 0.92,
+      color: sat ? "#ffffff" : fg,
+      weight: 1.15,
+      opacity: selected ? 0.9 : sat ? 0.85 : 0.65,
+      fillColor: selected ? bg : fillColor(n),
+      fillOpacity: selected ? 0.35 : 0.82,
+      lineJoin: "round",
+      lineCap: "round",
     };
   }
 
   function restyleMap() {
     if (!geoLayer) return;
     geoLayer.setStyle((f) => polyStyle(f));
+  }
+
+  function syncBasemapUi() {
+    document.querySelectorAll("[data-basemap]").forEach((btn) => {
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-basemap") === activeBasemap ? "true" : "false");
+    });
+  }
+
+  function applyTilePaneMode() {
+    if (!map) return;
+    const pane = map.getPane("tilePane");
+    if (!pane) return;
+    pane.classList.toggle("is-satellite", !!BASEMAPS[activeBasemap]?.satellite);
+  }
+
+  function setBasemap(key) {
+    const conf = BASEMAPS[key] || BASEMAPS.light;
+    activeBasemap = BASEMAPS[key] ? key : "light";
+    try {
+      localStorage.setItem("bs-basemap", activeBasemap);
+    } catch (e) {}
+    if (!map) {
+      syncBasemapUi();
+      return;
+    }
+    if (tileLayer) map.removeLayer(tileLayer);
+    tileLayer = L.tileLayer(conf.url, {
+      attribution: conf.attribution,
+      maxZoom: conf.maxZoom,
+    }).addTo(map);
+    applyTilePaneMode();
+    syncBasemapUi();
+    restyleMap();
   }
 
   function renderLegend() {
@@ -274,7 +358,7 @@
       <p>${rows.length} isu di wilayah ini.</p>
       ${list || `<p class="muted">Belum ada isu.</p>`}
       <div class="map-side-actions">
-        <button class="btn" type="button" data-to-daftar="1">Lihat di Daftar</button>
+        <button class="btn btn-primary" type="button" data-to-daftar="1">Lihat di Daftar</button>
         <button class="btn" type="button" data-clear-kec="1">Lepas saringan</button>
       </div>`;
   }
@@ -299,10 +383,11 @@
       return;
     }
     map = L.map("map", { scrollWheelZoom: true, attributionControl: true });
-    tileLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap · batas: BIG",
-      maxZoom: 18,
-    }).addTo(map);
+    try {
+      const saved = localStorage.getItem("bs-basemap");
+      if (saved && BASEMAPS[saved]) activeBasemap = saved;
+    } catch (e) {}
+    setBasemap(activeBasemap);
     geoLayer = L.geoJSON(geojson, {
       style: (f) => polyStyle(f),
       onEachFeature(feature, layer) {
@@ -352,6 +437,11 @@
     </div>`;
   }
 
+  function placeSelectList(btn, list) {
+    const gap = 8;
+    list.style.top = `${Math.round(btn.offsetHeight) + gap}px`;
+  }
+
   function bindSelects(root, handlers) {
     root.querySelectorAll("[data-select]").forEach((box) => {
       const key = box.getAttribute("data-select");
@@ -366,6 +456,7 @@
         });
         list.hidden = !open;
         btn.setAttribute("aria-expanded", String(open));
+        if (open) placeSelectList(btn, list);
       });
       list.querySelectorAll("button").forEach((opt) => {
         opt.addEventListener("click", (e) => {
@@ -384,7 +475,61 @@
     const name = META.judul || "Atlas Bojonegoro";
     const h1 = document.querySelector(".brand h1");
     if (h1) h1.textContent = name;
-    document.title = name;
+  }
+
+  const SITE_ORIGIN = "https://atlas.nusaiba.dev";
+  const TAB_SEO = {
+    peta: {
+      title: "Atlas Bojonegoro — Peta isu publik",
+      description:
+        "Peta 28 kecamatan Kabupaten Bojonegoro: warna mengikuti jumlah isu terpetakan, ringkasan inventaris, dan tautan ke daftar tersaring.",
+      path: "/",
+    },
+    daftar: {
+      title: "Atlas Bojonegoro — Daftar isu",
+      description:
+        "Inventaris isu urusan publik Bojonegoro: saring kategori, kecamatan, verifikasi, sentimen, dan buka detail entri.",
+      path: "/?tab=daftar",
+    },
+    kecamatan: {
+      title: "Atlas Bojonegoro — Ringkasan kecamatan",
+      description:
+        "Hitungan isu per 28 kecamatan Kabupaten Bojonegoro. Klik baris untuk membuka daftar tersaring ke wilayah itu.",
+      path: "/?tab=kecamatan",
+    },
+    docs: {
+      title: "Atlas Bojonegoro — Panduan membaca atlas",
+      description:
+        "Penjelasan prioritas P1–P5, tipe Tuduhan/Fakta, sentimen, verifikasi, warna peta, dan cara lapor warga.",
+      path: "/?tab=docs",
+    },
+    lapor: {
+      title: "Atlas Bojonegoro — Lapor isu",
+      description:
+        "Kirim laporan warga ke antrian redaksi Atlas Bojonegoro. Bukan kanal darurat atau polisi; jangan tulis data pribadi.",
+      path: "/?tab=lapor",
+    },
+  };
+
+  function setMetaContent(selector, content) {
+    const node = document.querySelector(selector);
+    if (node) node.setAttribute("content", content);
+  }
+
+  function syncDocumentSeo(tab) {
+    const site = META.judul || "Atlas Bojonegoro";
+    const seo = TAB_SEO[tab] || TAB_SEO.peta;
+    const title = seo.title.replace(/^Atlas Bojonegoro/, site);
+    const url = SITE_ORIGIN + seo.path;
+    document.title = title;
+    setMetaContent('meta[name="description"]', seo.description);
+    setMetaContent('meta[property="og:title"]', title);
+    setMetaContent('meta[property="og:description"]', seo.description);
+    setMetaContent('meta[property="og:url"]', url);
+    setMetaContent('meta[name="twitter:title"]', title);
+    setMetaContent('meta[name="twitter:description"]', seo.description);
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", url);
   }
 
   function renderStats() {
@@ -405,6 +550,7 @@
       [laporBaru, "Laporan baru"],
     ];
     el.stats.innerHTML = items.map(([n, l]) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+    requestAnimationFrame(syncStatsAsideHeight);
   }
 
   function renderToolbar() {
@@ -436,7 +582,7 @@
       ])}
       <div class="actions">
         <button class="btn" type="button" id="toggle-matrix">${state.matrix ? "Sembunyikan matriks" : "Matriks prioritas"}</button>
-        <button class="btn" type="button" id="reset">Reset</button>
+        <button class="btn btn-primary" type="button" id="reset">Reset</button>
       </div>`;
     bindSelects(el.toolbar, {
       kat: (v) => {
@@ -519,7 +665,7 @@
 
   function heatBg(n) {
     const t = Math.max(0, Math.min(1, (n - 1) / 4));
-    return `color-mix(in srgb, var(--fg) ${Math.round(t * 22)}%, var(--bg))`;
+    return `color-mix(in srgb, var(--neg) ${Math.round(10 + t * 52)}%, var(--bg))`;
   }
 
   function renderMatrix(rows) {
@@ -546,10 +692,16 @@
 
   function renderTable(rows) {
     if (!rows.length) {
-      el.table.innerHTML = `<p class="empty">Tidak ada isu untuk saringan ini. Longgarkan filter atau pilih kecamatan lain.</p>`;
+      el.table.classList.remove("is-empty");
+      el.table.classList.add("table-cards");
+      el.table.innerHTML = `<table>
+      <thead><tr><th>Prioritas</th><th>Isu</th><th>Kategori</th><th>Tipe</th><th>Verifikasi</th><th>Tanggal</th></tr></thead>
+      <tbody><tr class="empty-row"><td colspan="6">Tidak ada isu untuk saringan ini. Longgarkan filter atau pilih kecamatan lain.</td></tr></tbody>
+    </table>`;
       el.hasil.textContent = "0 isu";
       return;
     }
+    el.table.classList.remove("is-empty");
     el.hasil.textContent = `${rows.length} isu`;
     const body = rows
       .map(
@@ -591,7 +743,7 @@
     el.drawer.innerHTML = `
       <header>
         <h2 id="drawer-title">${esc(i.judul)}</h2>
-        <button class="close" type="button" aria-label="Tutup">×</button>
+        <button class="close" type="button" aria-label="Tutup"><span aria-hidden="true">×</span></button>
       </header>
       <dl>
         <dt>Prioritas</dt><dd>${esc(i.tier)} · skor ${i.prioritas} (dampak ${i.dampak} × urgensi ${i.urgensi})</dd>
@@ -654,7 +806,37 @@
   }
 
   function renderKecamatanTable() {
-    const rows = KECAMATAN.map(ringkasanKecamatan);
+    const wrap = document.querySelector("#view-kecamatan .table-kec");
+    const q = state.kecQ.trim().toLowerCase();
+    const rows = KECAMATAN.map(ringkasanKecamatan).filter((r) =>
+      !q ? true : r.nama.toLowerCase().includes(q)
+    );
+    if (el.kecMeta) {
+      el.kecMeta.textContent = q
+        ? `${rows.length} dari ${KECAMATAN.length} kecamatan`
+        : `${KECAMATAN.length} kecamatan`;
+    }
+    if (!wrap) return;
+    wrap.classList.remove("is-empty");
+    if (!document.getElementById("kec-body")) {
+      wrap.innerHTML = `<table>
+              <thead>
+                <tr>
+                  <th>Kecamatan</th>
+                  <th>Isu</th>
+                  <th>P1</th>
+                  <th>Tuduhan</th>
+                  <th>Verifikasi tertunda</th>
+                </tr>
+              </thead>
+              <tbody id="kec-body"></tbody>
+            </table>`;
+    }
+    el.kecBody = document.getElementById("kec-body");
+    if (!rows.length) {
+      el.kecBody.innerHTML = `<tr class="empty-row"><td colspan="5">Tidak ada kecamatan yang cocok. Coba nama lain.</td></tr>`;
+      return;
+    }
     el.kecBody.innerHTML = rows
       .map(
         (r) => `<tr tabindex="0" data-kec="${esc(r.nama)}">
@@ -666,7 +848,7 @@
       </tr>`
       )
       .join("");
-    el.kecBody.querySelectorAll("tr").forEach((tr) => {
+    el.kecBody.querySelectorAll("tr[data-kec]").forEach((tr) => {
       const go = () => {
         state.kec = tr.getAttribute("data-kec");
         setTab("daftar");
@@ -678,6 +860,18 @@
           go();
         }
       });
+    });
+  }
+
+  function bindKecamatanSearch() {
+    if (!el.kecQ) return;
+    let t;
+    el.kecQ.addEventListener("input", () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        state.kecQ = el.kecQ.value;
+        renderKecamatanTable();
+      }, 120);
     });
   }
 
@@ -714,6 +908,7 @@
       closeSelectLists();
       list.hidden = !open;
       btn.setAttribute("aria-expanded", String(open));
+      if (open) placeSelectList(btn, list);
     });
     list.querySelectorAll("button").forEach((opt) => {
       opt.addEventListener("click", (e) => {
@@ -930,7 +1125,7 @@
     return el.nav.classList.contains("is-open");
   }
 
-  const navHome = el.nav.parentElement;
+  const navSlot = document.getElementById("nav-slot");
   const mobileNav = window.matchMedia("(max-width: 767px)");
 
   function syncNavTop() {
@@ -941,8 +1136,7 @@
   }
 
   function parkNav() {
-    if (navHome && el.utilities) navHome.insertBefore(el.nav, el.utilities);
-    else if (navHome) navHome.appendChild(el.nav);
+    if (navSlot && el.nav.parentElement !== navSlot) navSlot.appendChild(el.nav);
     document.documentElement.style.removeProperty("--mobile-nav-top");
   }
 
@@ -954,6 +1148,59 @@
     }
     parkNav();
   }
+
+  function syncStatsAsideHeight() {
+    const stats = el.stats;
+    const card = document.querySelector('.aside-panel[data-aside="peta"] .map-side-card');
+    if (!stats || !card || stats.hidden) {
+      document.documentElement.style.removeProperty("--stats-h");
+      return;
+    }
+    requestAnimationFrame(() => {
+      const h = Math.round(stats.getBoundingClientRect().height);
+      if (h > 0) document.documentElement.style.setProperty("--stats-h", `${h}px`);
+    });
+  }
+
+  function syncAside(tab) {
+    document.querySelectorAll(".aside-panel").forEach((panel) => {
+      const on = panel.getAttribute("data-aside") === tab;
+      panel.hidden = !on;
+    });
+    const railLeft = document.getElementById("rail-left");
+    if (railLeft) {
+      const showLeft = tab === "docs" || tab === "lapor";
+      railLeft.hidden = !showLeft;
+      document.querySelector(".app-frame")?.classList.toggle("has-rail-left", showLeft);
+    }
+    document.querySelector(".app-frame")?.classList.toggle("docs-shell", tab === "docs");
+    const railAside = document.getElementById("rail-aside");
+    if (railAside) {
+      const showAside = tab === "peta" || tab === "docs" || tab === "lapor";
+      railAside.hidden = !showAside;
+      document.querySelector(".app-frame")?.classList.toggle("has-rail-aside", showAside);
+      document.querySelector(".app-frame")?.classList.toggle("aside-first", tab === "lapor");
+      if (showAside && tab === "peta") syncStatsAsideHeight();
+    }
+    const laporCta = document.querySelector(".utilities .tab-cta[data-go-tab='lapor']");
+    if (laporCta) laporCta.setAttribute("aria-current", tab === "lapor" ? "page" : "false");
+  }
+
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest(".rail-link[href^='?tab=']");
+    if (!link) return;
+    e.preventDefault();
+    const url = new URL(link.href, location.href);
+    const tab = url.searchParams.get("tab");
+    if (tab) setTab(tab);
+    const hash = url.hash;
+    if (hash) {
+      requestAnimationFrame(() => {
+        const target = document.querySelector(hash);
+        if (target) target.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "start" });
+      });
+    }
+  });
 
   function navFocusables() {
     return [el.navToggle, ...el.nav.querySelectorAll("[role=tab]")];
@@ -1021,6 +1268,8 @@
       btn.tabIndex = on ? 0 : -1;
     });
     closeNav();
+    syncAside(state.tab);
+    syncDocumentSeo(state.tab);
     const hideOverview = state.tab !== "peta";
     el.stats.hidden = hideOverview;
     if (changed) {
@@ -1037,124 +1286,12 @@
     if (state.tab === "daftar") refreshDaftar(true);
   }
 
-  const docsView = document.getElementById("view-docs");
-  if (docsView) {
-    docsView.addEventListener("click", (e) => {
-      const go = e.target.closest("[data-go-tab]");
-      if (go) setTab(go.getAttribute("data-go-tab"));
-    });
-  }
-
-  function bindDocsFaq() {
-    const items = [...document.querySelectorAll("#view-docs .faq-item")];
-    const running = new WeakMap();
-    const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
-
-    function durationMs() {
-      if (reduceMotion()) return 0;
-      const raw = getComputedStyle(document.documentElement).getPropertyValue("--dur-move").trim();
-      const n = Number.parseFloat(raw);
-      if (!Number.isFinite(n)) return 280;
-      return raw.endsWith("ms") ? n : n * 1000;
-    }
-
-    function stop(item) {
-      const anim = running.get(item);
-      if (!anim) return;
-      try { anim.commitStyles(); } catch (err) {}
-      anim.cancel();
-      running.delete(item);
-    }
-
-    function panel(item) {
-      let wrap = item.querySelector(".faq-collapse");
-      if (wrap) return wrap;
-      const body = item.querySelector(".faq-body");
-      if (!body) return null;
-      wrap = document.createElement("div");
-      wrap.className = "faq-collapse";
-      body.replaceWith(wrap);
-      wrap.appendChild(body);
-      return wrap;
-    }
-
-    function clearPanel(wrap) {
-      wrap.style.height = "";
-      wrap.style.opacity = "";
-    }
-
-    function afterAnim(item, anim, fn) {
-      const done = () => {
-        if (running.get(item) !== anim) return;
-        running.delete(item);
-        try { anim.cancel(); } catch (err) {}
-        fn();
-      };
-      anim.onfinish = done;
-      window.setTimeout(done, durationMs() + 80);
-    }
-
-    function openFaq(item) {
-      const wrap = panel(item);
-      if (!wrap) return;
-      stop(item);
-      item.open = true;
-      wrap.style.height = "auto";
-      wrap.style.opacity = "1";
-      const body = wrap.querySelector(".faq-body");
-      const end = Math.max(wrap.scrollHeight, body ? body.scrollHeight : 0);
-      wrap.style.height = "0px";
-      wrap.style.opacity = "0";
-      void wrap.offsetHeight;
-      const anim = wrap.animate(
-        [
-          { height: "0px", opacity: 0 },
-          { height: end + "px", opacity: 1 },
-        ],
-        { duration: durationMs(), easing: ease, fill: "forwards" }
-      );
-      running.set(item, anim);
-      afterAnim(item, anim, () => clearPanel(wrap));
-    }
-
-    function closeFaq(item) {
-      const wrap = panel(item);
-      if (!wrap || !item.open) return;
-      stop(item);
-      const from = wrap.getBoundingClientRect().height;
-      const anim = wrap.animate(
-        [
-          { height: from + "px", opacity: 1 },
-          { height: "0px", opacity: 0 },
-        ],
-        { duration: durationMs(), easing: ease, fill: "forwards" }
-      );
-      running.set(item, anim);
-      afterAnim(item, anim, () => {
-        item.open = false;
-        clearPanel(wrap);
-      });
-    }
-
-    items.forEach((item) => {
-      panel(item);
-      const summary = item.querySelector("summary");
-      if (!summary) return;
-      summary.addEventListener("click", (e) => {
-        if (reduceMotion()) return;
-        e.preventDefault();
-        if (item.open) closeFaq(item);
-        else {
-          items.forEach((other) => {
-            if (other !== item && other.open) closeFaq(other);
-          });
-          openFaq(item);
-        }
-      });
-    });
-  }
-
-  bindDocsFaq();
+  document.addEventListener("click", (e) => {
+    const go = e.target.closest("[data-go-tab]");
+    if (!go) return;
+    e.preventDefault();
+    setTab(go.getAttribute("data-go-tab"));
+  });
 
   document.querySelectorAll(".view").forEach((panel) => {
     panel.addEventListener("animationend", (e) => {
@@ -1188,6 +1325,7 @@
     });
   }
   window.addEventListener("resize", () => {
+    syncStatsAsideHeight();
     if (!mobileNav.matches) {
       if (navIsOpen()) closeNav();
       else parkNav();
@@ -1238,14 +1376,54 @@
     }
   });
 
+  document.getElementById("map-basemap")?.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-basemap]");
+    if (!btn) return;
+    setBasemap(btn.getAttribute("data-basemap"));
+  });
+  try {
+    const saved = localStorage.getItem("bs-basemap");
+    if (saved && BASEMAPS[saved]) activeBasemap = saved;
+  } catch (e) {}
+  syncBasemapUi();
+
   el.theme.addEventListener("click", () => setTheme(themeNow() === "dark" ? "light" : "dark"));
 
   setTheme(themeNow());
   renderBrand();
   renderStats();
   renderToolbar();
+
+  (function loadGithubStars() {
+    const buttons = document.querySelectorAll("[data-gh-btn]");
+    if (!buttons.length) return;
+    const repo = (DATA && DATA.config && DATA.config.githubRepo) || "sukirman1901/atlas-bojonegoro";
+    const href = `https://github.com/${repo}`;
+    buttons.forEach((btn) => { btn.href = href; });
+    fetch(`https://api.github.com/repos/${repo}`, {
+      headers: { Accept: "application/vnd.github+json" },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        const n = Number(data.stargazers_count);
+        if (!Number.isFinite(n)) return;
+        buttons.forEach((btn) => {
+          const countEl = btn.querySelector(".gh-btn-count");
+          if (countEl) countEl.textContent = String(n);
+        });
+      })
+      .catch(() => {});
+  })();
   renderKecamatanTable();
+  bindKecamatanSearch();
   renderLaporSelects();
   setTab(state.tab);
   if (state.id) openDrawer(state.id);
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    });
+  }
 })();

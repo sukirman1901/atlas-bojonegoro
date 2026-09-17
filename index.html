@@ -3,11 +3,83 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Atlas Bojonegoro</title>
-  <meta name="description" content="Isu publik Kabupaten Bojonegoro: peta 28 kecamatan, inventaris, verifikasi editorial, dan form lapor.">
+  <title>Atlas Bojonegoro — Isu publik Kabupaten Bojonegoro</title>
+  <meta name="description" content="Peta dan inventaris isu urusan publik Kabupaten Bojonegoro: 28 kecamatan, verifikasi editorial, dan form lapor warga.">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e0e0e" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://atlas.nusaiba.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:site_name" content="Atlas Bojonegoro">
+  <meta property="og:url" content="https://atlas.nusaiba.dev/">
+  <meta property="og:title" content="Atlas Bojonegoro — Isu publik Kabupaten Bojonegoro">
+  <meta property="og:description" content="Peta dan inventaris isu urusan publik Kabupaten Bojonegoro: 28 kecamatan, verifikasi editorial, dan form lapor warga.">
+  <meta property="og:image" content="https://atlas.nusaiba.dev/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Atlas Bojonegoro — isu publik Kabupaten Bojonegoro">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Atlas Bojonegoro — Isu publik Kabupaten Bojonegoro">
+  <meta name="twitter:description" content="Peta dan inventaris isu urusan publik Kabupaten Bojonegoro: 28 kecamatan, verifikasi editorial, dan form lapor warga.">
+  <meta name="twitter:image" content="https://atlas.nusaiba.dev/og-image.png">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Atlas Bjn">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://atlas.nusaiba.dev/#website",
+        "name": "Atlas Bojonegoro",
+        "url": "https://atlas.nusaiba.dev/",
+        "inLanguage": "id-ID",
+        "description": "Situs publik untuk melihat isu urusan publik di Kabupaten Bojonegoro: di peta, di daftar, dan per kecamatan.",
+        "publisher": { "@id": "https://atlas.nusaiba.dev/#org" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://atlas.nusaiba.dev/#org",
+        "name": "Atlas Bojonegoro",
+        "url": "https://atlas.nusaiba.dev/",
+        "logo": "https://atlas.nusaiba.dev/apple-touch-icon.png",
+        "sameAs": [
+          "https://github.com/sukirman1901/atlas-bojonegoro"
+        ]
+      },
+      {
+        "@type": "Dataset",
+        "@id": "https://atlas.nusaiba.dev/#dataset",
+        "name": "Inventaris isu publik Kabupaten Bojonegoro",
+        "description": "Inventaris isu urusan publik Kabupaten Bojonegoro yang disusun manusia dari sumber terbuka, ditata untuk disaring dan dicek ulang.",
+        "url": "https://atlas.nusaiba.dev/",
+        "inLanguage": "id-ID",
+        "creator": { "@id": "https://atlas.nusaiba.dev/#org" },
+        "license": "https://opensource.org/licenses/MIT",
+        "isAccessibleForFree": true,
+        "spatialCoverage": {
+          "@type": "AdministrativeArea",
+          "name": "Kabupaten Bojonegoro",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Jawa Timur, Indonesia"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -7.1502,
+            "longitude": 111.8817
+          }
+        }
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script>
     (function () {
@@ -18,683 +90,7 @@
       } catch (e) {}
     })();
   </script>
-  <style>
-    :root {
-      --bg: #fff;
-      --fg: #111;
-      --muted: #5c5c5c;
-      --line: #d4d4d4;
-      --fill: #f4f4f4;
-      --fill-2: #ececec;
-      --accent: #111;
-      --on-accent: #fff;
-      --neg: #9b1c1c;
-      --pos: #17663a;
-      --warn: #8a5a00;
-      --focus: #111;
-      --map-0: #f4f4f4;
-      --map-1: #d4d4d4;
-      --map-2: #9a9a9a;
-      --map-3: #4a4a4a;
-      --map-4: #111;
-      --shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
-      --font: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-      --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-      --max: 92rem;
-      --radius: 2px;
-      --header-h: 3.5rem;
-      --page-top: 3rem;
-      --touch: 2.75rem;
-      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      --dur-fast: 140ms;
-      --dur-move: 280ms;
-      --dur-drawer: 320ms;
-    }
-    html[data-theme="dark"] {
-      --bg: #111;
-      --fg: #f2f2f2;
-      --muted: #a3a3a3;
-      --line: #3a3a3a;
-      --fill: #1c1c1c;
-      --fill-2: #262626;
-      --accent: #f2f2f2;
-      --on-accent: #111;
-      --neg: #f0a8a8;
-      --pos: #8fd4ad;
-      --warn: #e6c07b;
-      --focus: #f2f2f2;
-      --map-0: #1c1c1c;
-      --map-1: #3a3a3a;
-      --map-2: #6e6e6e;
-      --map-3: #b5b5b5;
-      --map-4: #f2f2f2;
-      --shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
-    }
-    @font-face {
-      font-family: "IBM Plex Sans";
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@latest/latin-400-normal.woff2") format("woff2");
-    }
-    @font-face {
-      font-family: "IBM Plex Sans";
-      font-style: normal;
-      font-weight: 500;
-      font-display: swap;
-      src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@latest/latin-500-normal.woff2") format("woff2");
-    }
-    @font-face {
-      font-family: "IBM Plex Sans";
-      font-style: normal;
-      font-weight: 600;
-      font-display: swap;
-      src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@latest/latin-600-normal.woff2") format("woff2");
-    }
-    @font-face {
-      font-family: "IBM Plex Mono";
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-mono@latest/latin-400-normal.woff2") format("woff2");
-    }
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body {
-      margin: 0; min-height: 100%; background: var(--bg); color: var(--fg);
-      transition: background-color var(--dur-move) var(--ease-out), color var(--dur-move) var(--ease-out);
-    }
-    html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); scroll-behavior: smooth; }
-    body {
-      font-family: var(--font);
-      font-size: 0.9375rem;
-      line-height: 1.5;
-    }
-    body.nav-open { overflow-y: hidden; }
-    :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-    a { color: inherit; }
-    button, input, select, textarea { font: inherit; color: inherit; }
-    .skip {
-      position: absolute; left: 0.75rem; top: -3rem; z-index: 80;
-      background: var(--fg); color: var(--bg); padding: 0.4rem 0.7rem;
-    }
-    .skip:focus { top: 0.75rem; }
-    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 1rem; }
-    @media (min-width: 768px) { .wrap { padding: 0 1.5rem; } }
-    @media (min-width: 1024px) { .wrap { padding: 0 2rem; } }
-
-    .topbar {
-      position: sticky; top: 0; z-index: 80;
-      background: var(--bg);
-      border-bottom: 1px solid var(--line);
-      padding-top: env(safe-area-inset-top, 0px);
-      transition: background-color var(--dur-move) var(--ease-out), border-color var(--dur-move) var(--ease-out);
-    }
-    .topbar-inner {
-      display: flex; align-items: center; gap: 0.5rem;
-      min-height: var(--header-h);
-      min-width: 0;
-    }
-    .brand {
-      display: flex; flex-direction: row; align-items: center; gap: 0.5rem;
-      min-width: 0; flex: 1 1 auto; position: relative; z-index: 2;
-    }
-    .brand-mark {
-      flex: 0 0 auto; width: 1.5rem; height: 1.5rem; display: block; color: var(--fg);
-    }
-    .brand-copy {
-      display: flex; flex-direction: column; justify-content: center;
-      min-width: 0; gap: 0.1rem;
-    }
-    .brand h1 {
-      margin: 0; font-size: 0.875rem; font-weight: 600; letter-spacing: -0.02em;
-      line-height: 1.2;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .brand p {
-      margin: 0; color: var(--muted); font-size: 0.6875rem; line-height: 1.25;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    @media (max-width: 479px) { .brand p { display: none; } }
-    @media (min-width: 480px) {
-      .brand-mark { width: 1.75rem; height: 1.75rem; }
-      .brand h1 { font-size: 0.9375rem; }
-    }
-    @media (min-width: 768px) {
-      .brand { gap: 0.65rem; }
-      .brand-mark { width: 2rem; height: 2rem; }
-    }
-    .utilities { display: flex; align-items: center; gap: 0.5rem; flex: 0 0 auto; position: relative; z-index: 2; }
-    .tab-cta {
-      margin: 0;
-      padding: 0 0.75rem;
-      min-height: var(--touch);
-      height: var(--touch);
-      width: auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      flex: 0 0 auto;
-      white-space: nowrap;
-      background: var(--accent);
-      color: var(--on-accent);
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      font-weight: 600;
-      font-size: 0.8125rem;
-      transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
-    }
-    .tab.tab-cta {
-      background: var(--accent);
-      color: var(--on-accent);
-      padding: 0 0.75rem;
-      height: var(--touch);
-      min-height: var(--touch);
-    }
-    .icon-btn {
-      appearance: none; background: transparent; border: 0;
-      width: var(--touch); height: var(--touch); padding: 0;
-      border-radius: var(--radius); cursor: pointer; flex: 0 0 auto;
-      display: grid; place-items: center; position: relative; color: var(--fg);
-      transition: background-color var(--dur-fast) var(--ease-out), transform 80ms var(--ease-out);
-    }
-    .nav-toggle { flex-shrink: 0; }
-    .icon-btn:hover { background: var(--fill); }
-    .icon-btn:active { transform: scale(0.96); }
-    .icon-btn svg { width: 1.25rem; height: 1.25rem; display: block; }
-    .theme-btn .icon-sun { display: none; }
-    html[data-theme="dark"] .theme-btn .icon-moon { display: none; }
-    html[data-theme="dark"] .theme-btn .icon-sun { display: block; }
-    .nav-toggle span,
-    .nav-toggle span::before,
-    .nav-toggle span::after {
-      display: block; width: 0.9rem; height: 1.5px; background: currentColor;
-      position: relative; transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
-    }
-    .nav-toggle span::before,
-    .nav-toggle span::after {
-      content: ""; position: absolute; left: 0;
-    }
-    .nav-toggle span::before { top: -5px; }
-    .nav-toggle span::after { top: 5px; }
-    .nav-toggle[aria-expanded="true"] span { background: transparent; }
-    .nav-toggle[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
-    .nav-toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
-    .nav-scrim {
-      position: fixed;
-      top: var(--mobile-nav-top, calc(var(--header-h) + env(safe-area-inset-top, 0px)));
-      left: 0; right: 0; bottom: 0; z-index: 65;
-      background: color-mix(in srgb, var(--fg) 32%, transparent);
-      opacity: 0; pointer-events: none;
-      transition: opacity var(--dur-drawer) var(--ease-out);
-    }
-    .nav-scrim[hidden] { display: none; }
-    .nav-scrim.is-open { opacity: 1; pointer-events: auto; }
-    .nav-drawer {
-      position: fixed; z-index: 70;
-      top: var(--mobile-nav-top, calc(var(--header-h) + env(safe-area-inset-top, 0px)));
-      left: 0; right: 0; bottom: 0;
-      width: 100%;
-      background: var(--bg);
-      border: 0;
-      padding: 0.5rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
-      transform: translateY(-100%);
-      visibility: hidden;
-      transition: transform var(--dur-drawer) var(--ease-out), visibility 0s linear var(--dur-drawer);
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-      pointer-events: none;
-    }
-    .nav-drawer.is-open {
-      transform: none;
-      visibility: visible;
-      pointer-events: auto;
-      transition: transform var(--dur-drawer) var(--ease-out), visibility 0s;
-    }
-    .tabs { display: flex; flex-direction: column; }
-    .tab {
-      appearance: none; background: none; border: 0;
-      color: var(--muted); cursor: pointer;
-      padding: 0.875rem 1rem; min-height: var(--touch);
-      text-align: left; font-weight: 500; font-size: 1rem;
-      transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
-    }
-    @media (max-width: 767px) {
-      :root { --header-h: 4rem; }
-      .tabs .tab { width: 100%; }
-    }
-    .tab[aria-selected="true"] { color: var(--fg); background: var(--fill); font-weight: 600; }
-    .tab-cta:hover {
-      background: color-mix(in srgb, var(--accent) 82%, var(--on-accent));
-      color: var(--on-accent);
-      border-color: color-mix(in srgb, var(--accent) 82%, var(--on-accent));
-    }
-    .tab.tab-cta[aria-selected="true"] {
-      background: var(--accent);
-      color: var(--on-accent);
-      border-color: var(--accent);
-    }
-    @media (min-width: 768px) {
-      .nav-toggle, .nav-scrim { display: none !important; }
-      .icon-btn { width: 2.25rem; height: 2.25rem; }
-      .brand { flex: 0 1 auto; }
-      .brand h1 { overflow: visible; text-overflow: unset; white-space: nowrap; }
-      .nav-drawer,
-      .nav-drawer.is-open {
-        position: static; left: auto; right: auto; bottom: auto;
-        width: auto; height: auto; max-height: none;
-        transform: none; border: 0; padding: 0; overflow: visible;
-        flex: 1 1 auto; min-width: 0; box-shadow: none; top: auto;
-        pointer-events: auto; visibility: visible;
-      }
-      .tabs {
-        flex-direction: row; justify-content: flex-end; align-items: center;
-        gap: 0.15rem;
-        overflow-x: auto; scrollbar-width: none;
-      }
-      .tabs::-webkit-scrollbar { display: none; }
-      .tab {
-        width: auto;
-        flex: 0 0 auto;
-        padding: 0.85rem 0.7rem; min-height: 0; background: none;
-        white-space: nowrap; font-size: 0.875rem;
-      }
-      .tabs .tab { width: auto; }
-      .tab[aria-selected="true"] { background: none; }
-      .tab-cta,
-      .tab.tab-cta,
-      .tab.tab-cta[aria-selected="true"] {
-        order: -1;
-        margin: 0;
-        padding: 0 0.8rem;
-        min-height: 2.25rem;
-        height: 2.25rem;
-        font-size: 0.875rem;
-        background: var(--accent);
-        color: var(--on-accent);
-        border-color: var(--accent);
-      }
-      .tab-cta:hover,
-      .tab.tab-cta[aria-selected="true"]:hover {
-        background: color-mix(in srgb, var(--accent) 82%, var(--on-accent));
-        color: var(--on-accent);
-        border-color: color-mix(in srgb, var(--accent) 82%, var(--on-accent));
-      }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      html, body, .topbar, .nav-drawer, .nav-drawer.is-open, .nav-scrim, .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after, .icon-btn, .btn, .tab, .tab-cta, .drawer-root, .drawer, tbody tr {
-        transition: none;
-      }
-      .view.is-enter { animation: none; }
-      .icon-btn:active, .btn:active { transform: none; }
-    }
-
-    .stats[hidden] { display: none !important; }
-
-    .stats {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-      background: var(--line); border: 1px solid var(--line);
-      margin: var(--page-top) 0 1rem;
-    }
-    .stat { background: var(--bg); padding: 0.7rem 0.85rem; }
-    .stat b { display: block; font-size: 1.25rem; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
-    .stat span { color: var(--muted); font-size: 0.75rem; }
-    @media (min-width: 768px) { .stats { grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 1024px) { .stats { grid-template-columns: repeat(8, 1fr); } }
-
-    .toolbar {
-      display: grid; grid-template-columns: 1fr; gap: 0.75rem;
-      padding: 0 0 0.85rem; border-bottom: 1px solid var(--line);
-    }
-    .field { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
-    .field > span, .field-label {
-      font-size: 0.6875rem; letter-spacing: 0.04em; text-transform: uppercase;
-      color: var(--muted); font-weight: 500;
-    }
-    .search input, .field input, .field textarea, .select-btn, .btn {
-      border: 1px solid var(--line); background: var(--bg); border-radius: var(--radius);
-    }
-    .search input, .field input, .field textarea {
-      padding: 0.55rem 0.65rem; width: 100%; min-height: var(--touch); font-size: 1rem;
-    }
-    .field textarea { min-height: 8rem; resize: vertical; }
-    .select { position: relative; min-width: 0; width: 100%; }
-    .select-btn {
-      display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
-      width: 100%; text-align: left; padding: 0 0.65rem;
-      height: var(--touch); min-height: var(--touch); max-height: var(--touch);
-      cursor: pointer; font-size: 1rem; overflow: hidden;
-    }
-    .select-btn-label {
-      min-width: 0; flex: 1 1 auto;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      text-align: left; color: inherit; font: inherit; text-transform: none; letter-spacing: normal;
-    }
-    .select-btn::after {
-      content: ""; width: 0.45rem; height: 0.45rem;
-      border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
-      transform: rotate(45deg) translate(-1px, -1px); opacity: 0.7; flex: 0 0 auto;
-    }
-    .select-list {
-      position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 2px);
-      background: var(--bg); border: 1px solid var(--line); box-shadow: var(--shadow);
-      max-height: min(16rem, 50vh); overflow: auto; padding: 0.25rem;
-    }
-    .select-list[hidden] { display: none; }
-    .select-list button {
-      appearance: none; display: block; width: 100%; text-align: left;
-      background: none; border: 0; padding: 0.65rem 0.55rem;
-      min-height: var(--touch); cursor: pointer; border-radius: var(--radius);
-    }
-    .select-list button[aria-selected="true"], .select-list button:hover { background: var(--fill-2); }
-    .btn {
-      padding: 0.55rem 0.75rem; min-height: var(--touch); cursor: pointer; background: var(--bg);
-      transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform 80ms var(--ease-out);
-    }
-    .btn:hover { background: var(--fill); }
-    .btn:active { transform: scale(0.96); }
-    .btn-primary {
-      background: var(--accent); color: var(--on-accent); border-color: var(--accent);
-    }
-    .btn-primary:hover:not(:disabled) {
-      background: color-mix(in srgb, var(--accent) 82%, var(--on-accent));
-      color: var(--on-accent);
-      border-color: color-mix(in srgb, var(--accent) 82%, var(--on-accent));
-      filter: none;
-    }
-    .btn-primary:disabled,
-    .btn-primary:disabled:hover {
-      opacity: 0.45; cursor: not-allowed; filter: none; transform: none;
-      background: var(--accent); color: var(--on-accent); border-color: var(--accent);
-    }
-    .actions { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
-    @media (min-width: 768px) {
-      .toolbar { grid-template-columns: 1fr 1fr; gap: 0.65rem 0.75rem; }
-      .toolbar .search { grid-column: 1 / -1; }
-      .actions { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
-      .search input, .field input, .select-btn {
-        font-size: 0.9375rem; min-height: 2.5rem; height: 2.5rem; max-height: 2.5rem;
-      }
-      .field textarea { font-size: 0.9375rem; }
-    }
-    @media (min-width: 1024px) {
-      .toolbar {
-        grid-template-columns: minmax(12rem, 1.5fr) repeat(3, minmax(0, 1fr));
-        align-items: end;
-      }
-      .toolbar .search { grid-column: auto; }
-      .actions { grid-column: 1 / -1; grid-template-columns: repeat(2, max-content); }
-    }
-    @media (min-width: 1440px) {
-      .toolbar {
-        grid-template-columns: minmax(14rem, 1.4fr) repeat(5, minmax(8.5rem, 1fr)) auto;
-      }
-      .actions { grid-column: auto; margin-left: 0; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .btn:active { transform: none; }
-    }
-
-    .view { padding: 1rem 0 3rem; }
-    #view-daftar,
-    #view-kecamatan,
-    #view-docs,
-    #view-lapor { padding-top: var(--page-top); }
-    .view[hidden] { display: none !important; }
-    .view.is-enter {
-      animation: fade-up var(--dur-move) var(--ease-out) both;
-    }
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(0.75rem); }
-      to { opacity: 1; transform: none; }
-    }
-
-    .map-layout {
-      display: grid; gap: 1rem;
-    }
-    @media (min-width: 1024px) {
-      .map-layout { grid-template-columns: minmax(0, 1.6fr) minmax(18rem, 0.9fr); align-items: start; }
-    }
-    #map {
-      height: 22rem; width: 100%; border: 1px solid var(--line); background: var(--fill);
-      z-index: 1;
-    }
-    @media (min-width: 768px) { #map { height: 32rem; } }
-    @media (min-width: 1024px) { #map { height: 36rem; } }
-    .map-side { border: 1px solid var(--line); padding: 0.85rem; background: var(--bg); }
-    .map-side h2 { margin: 0 0 0.35rem; font-size: 1rem; }
-    .map-side p { margin: 0 0 0.75rem; color: var(--muted); font-size: 0.875rem; }
-    .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 0.85rem; font-size: 0.75rem; color: var(--muted); margin: 0.5rem 0 0; }
-    .legend i {
-      display: inline-block; width: 0.75rem; height: 0.75rem; margin-right: 0.3rem;
-      border: 1px solid var(--line); vertical-align: -1px;
-    }
-    .issue-mini { border-top: 1px solid var(--line); padding: 0.65rem 0; }
-    .issue-mini button {
-      appearance: none; background: none; border: 0; padding: 0.35rem 0;
-      min-height: var(--touch); cursor: pointer;
-      text-align: left; font-weight: 550;
-    }
-    .issue-mini small { display: block; color: var(--muted); }
-
-    .matrix { overflow: auto; border: 1px solid var(--line); margin: 1rem 0; }
-    .heat {
-      display: grid; min-width: 36rem;
-      grid-template-columns: 4.5rem 4.5rem 4.5rem 4.5rem 4.5rem minmax(12rem, 1fr);
-      font-size: 0.75rem;
-    }
-    .heat div { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--line); }
-    .heat .h { color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.65rem; position: sticky; top: 0; background: var(--bg); }
-    .cell-p { font-variant-numeric: tabular-nums; font-family: var(--mono); }
-
-    .table-wrap { overflow: auto; border: 1px solid var(--line); }
-    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-    th, td { text-align: left; padding: 0.55rem 0.65rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-    th { font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
-    tbody tr { cursor: pointer; transition: background-color var(--dur-fast) var(--ease-out); }
-    tbody tr:hover { background: var(--fill); }
-    tbody tr:focus-within { background: var(--fill-2); }
-    @media (max-width: 767px) {
-      .table-cards thead { display: none; }
-      .table-cards table, .table-cards tbody { display: block; width: 100%; }
-      .table-cards tr {
-        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 0.75rem;
-        padding: 0.85rem 1rem; border-bottom: 1px solid var(--line);
-      }
-      .table-cards td { border: 0; padding: 0; }
-      .table-cards td[data-th="Prioritas"] { grid-column: 1; grid-row: 1; }
-      .table-cards td[data-th="Verifikasi"] { grid-column: 2; grid-row: 1; justify-self: end; }
-      .table-cards td[data-th="Isu"] { grid-column: 1 / -1; grid-row: 2; }
-      .table-cards td[data-th="Kategori"] { grid-column: 1; grid-row: 3; color: var(--muted); font-size: 0.8125rem; }
-      .table-cards td[data-th="Tipe"] { grid-column: 2; grid-row: 3; justify-self: end; color: var(--muted); font-size: 0.8125rem; }
-      .table-cards td[data-th="Tanggal"] { grid-column: 1 / -1; grid-row: 4; color: var(--muted); font-size: 0.8125rem; }
-      .table-kec thead { display: none; }
-      .table-kec table, .table-kec tbody { display: block; width: 100%; }
-      .table-kec tr {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem 0.75rem;
-        padding: 0.85rem 1rem; border-bottom: 1px solid var(--line);
-      }
-      .table-kec td { border: 0; padding: 0; }
-      .table-kec td:first-child { grid-column: 1 / -1; }
-      .table-kec td[data-th]::before {
-        content: attr(data-th); display: block;
-        font-size: 0.65rem; letter-spacing: 0.04em; text-transform: uppercase;
-        color: var(--muted); font-weight: 500;
-      }
-    }
-    .judul { font-weight: 550; }
-    .muted { color: var(--muted); }
-    .num { font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 0.8125rem; }
-    .badge {
-      display: inline-block; font-size: 0.6875rem; letter-spacing: 0.02em;
-      border: 1px solid var(--line); padding: 0.1rem 0.35rem; border-radius: var(--radius);
-      white-space: nowrap;
-    }
-    .badge-neg { color: var(--neg); border-color: color-mix(in srgb, var(--neg) 40%, var(--line)); }
-    .badge-pos { color: var(--pos); border-color: color-mix(in srgb, var(--pos) 40%, var(--line)); }
-    .badge-warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); }
-    .empty, .error {
-      padding: 1.25rem; border: 1px dashed var(--line); color: var(--muted); margin: 1rem 0;
-    }
-    .error { color: var(--neg); border-color: color-mix(in srgb, var(--neg) 40%, var(--line)); }
-
-    .drawer-root[hidden] { display: none; }
-    .drawer-root {
-      position: fixed; inset: 0; z-index: 80;
-      background: color-mix(in srgb, var(--fg) 28%, transparent);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--dur-drawer) var(--ease-out);
-    }
-    .drawer-root.is-open { opacity: 1; pointer-events: auto; }
-    .drawer {
-      position: absolute; top: 0; right: 0; height: 100%; width: min(32rem, 100%);
-      background: var(--bg); border-left: 1px solid var(--line);
-      overflow: auto; padding: 1.25rem 1.25rem 3rem;
-      padding-top: max(1.25rem, env(safe-area-inset-top, 0px));
-      transform: translateX(100%);
-      transition: transform var(--dur-drawer) var(--ease-out);
-    }
-    .drawer-root.is-open .drawer { transform: none; }
-    .drawer header { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
-    .drawer h2 { margin: 0; font-size: 1.15rem; letter-spacing: -0.02em; text-wrap: balance; }
-    .drawer dl { margin: 1rem 0 0; }
-    .drawer dt { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 0.85rem; }
-    .drawer dd { margin: 0.15rem 0 0; }
-    .close {
-      appearance: none; background: var(--fill); border: 1px solid var(--line);
-      width: var(--touch); height: var(--touch); cursor: pointer; border-radius: var(--radius);
-    }
-
-    .form-grid { display: grid; gap: 0.85rem; min-width: 0; position: relative; }
-    .form-actions { display: grid; gap: 0.5rem; }
-    .form-actions .btn-primary { width: 100%; }
-    .field-error, .form-msg {
-      margin: 0;
-      font-size: 0.8125rem;
-      color: var(--neg);
-    }
-    .form-msg-ok { color: var(--pos); }
-    .form-msg a { color: inherit; }
-    .select-btn[aria-invalid="true"],
-    .field input[aria-invalid="true"],
-    .field textarea[aria-invalid="true"] {
-      border-color: color-mix(in srgb, var(--neg) 55%, var(--line));
-    }
-    .hp {
-      position: absolute;
-      left: -10000px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-    }
-    @media (min-width: 768px) {
-      .form-actions { display: flex; flex-wrap: wrap; }
-      .form-actions .btn-primary { width: auto; min-width: 11rem; }
-    }
-    .map-side-actions { display: grid; gap: 0.5rem; margin-top: 0.75rem; }
-    @media (min-width: 768px) {
-      .map-side-actions { display: flex; flex-wrap: wrap; }
-      .map-side-actions .btn { width: auto; }
-    }
-    .hint { margin: 0; color: var(--muted); font-size: 0.875rem; max-width: 40rem; }
-    .docs {
-      display: grid;
-      gap: 1.5rem;
-      padding-bottom: 1rem;
-    }
-    .docs-intro {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-    .docs-kicker {
-      margin: 0;
-      font-size: 0.6875rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 500;
-    }
-    .docs-lede {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.875rem;
-      font-weight: 400;
-      letter-spacing: 0;
-      max-width: 28rem;
-      text-wrap: pretty;
-    }
-    .docs-cta { margin: 1rem 0 0; display: grid; width: 100%; }
-    .docs-cta .btn { width: 100%; }
-    .faq-list {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--bg);
-      min-width: 0;
-    }
-    .faq-item { border-bottom: 1px solid var(--line); }
-    .faq-item:last-child { border-bottom: 0; }
-    .faq-item summary {
-      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-      min-height: var(--touch);
-      padding: 0.85rem 1rem;
-      cursor: pointer;
-      list-style: none;
-      font-weight: 500;
-    }
-    .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-item summary::marker { content: ""; }
-    .faq-item summary::after {
-      content: "";
-      width: 0.45rem; height: 0.45rem;
-      border-right: 1.5px solid currentColor;
-      border-bottom: 1.5px solid currentColor;
-      transform: rotate(45deg);
-      flex: 0 0 auto;
-      opacity: 0.7;
-      transition: transform var(--dur-move) var(--ease-out);
-    }
-    .faq-item[open] summary::after { transform: rotate(225deg); }
-    .faq-collapse { overflow: hidden; }
-    .faq-body {
-      padding: 0 1rem 1rem;
-      color: var(--muted);
-      font-size: 0.9375rem;
-    }
-    .faq-body p, .faq-body ol { margin: 0 0 0.65rem; }
-    .faq-body ol { padding-left: 1.15rem; }
-    .faq-body li { margin: 0.3rem 0; }
-    .faq-body p:last-child, .faq-body ol:last-child { margin-bottom: 0; }
-    @media (min-width: 768px) {
-      .docs-cta { display: flex; }
-      .docs-cta .btn { width: auto; }
-    }
-    @media (min-width: 1024px) {
-      .docs {
-        grid-template-columns: repeat(8, 1fr);
-        gap: 2rem;
-        align-items: start;
-      }
-      .docs-intro { grid-column: 1 / 4; position: sticky; top: calc(var(--header-h) + var(--page-top)); }
-      .faq-list,
-      .docs > .form-grid { grid-column: 4 / 9; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .faq-item summary::after { transition: none; }
-    }
-    .status-ok, .form-msg-ok { color: var(--pos); }
-    footer { border-top: 1px solid var(--line); padding: 1.25rem 0 2rem; color: var(--muted); font-size: 0.8125rem; }
-    .leaflet-container { font-family: var(--font); background: var(--fill); }
-    .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--bg); color: var(--fg); border-radius: var(--radius); }
-    #map .leaflet-interactive:focus,
-    #map .leaflet-interactive:focus-visible {
-      outline: none;
-    }
-    html[data-theme="dark"] .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(0.3); }
-  </style>
+  <link rel="stylesheet" href="atlas.css?v=map-zoom">
 </head>
 <body>
   <a class="skip" href="#isi">Lewati ke isi</a>
@@ -709,14 +105,33 @@
           <p>Isu publik Kabupaten Bojonegoro</p>
         </div>
       </div>
-      <nav class="nav-drawer" id="site-nav" aria-label="Layar utama">
-        <div class="tabs" role="tablist" aria-label="Layar utama" aria-owns="tab-peta tab-daftar tab-kecamatan tab-docs tab-lapor">
-          <button class="tab" role="tab" id="tab-peta" aria-controls="view-peta" aria-selected="true" data-tab="peta" type="button">Peta</button>
-          <button class="tab" role="tab" id="tab-daftar" aria-controls="view-daftar" aria-selected="false" data-tab="daftar" type="button">Daftar</button>
-          <button class="tab" role="tab" id="tab-kecamatan" aria-controls="view-kecamatan" aria-selected="false" data-tab="kecamatan" type="button">Kecamatan</button>
-          <button class="tab" role="tab" id="tab-docs" aria-controls="view-docs" aria-selected="false" data-tab="docs" type="button">Docs</button>
-        </div>
-      </nav>
+      <div class="nav-slot" id="nav-slot">
+        <nav class="site-nav" id="site-nav" aria-label="Layar utama">
+          <div class="tabs" role="tablist" aria-label="Layar utama">
+            <button class="tab" role="tab" id="tab-peta" aria-controls="view-peta" aria-selected="true" data-tab="peta" type="button">Peta</button>
+            <button class="tab" role="tab" id="tab-daftar" aria-controls="view-daftar" aria-selected="false" data-tab="daftar" type="button">Daftar</button>
+            <button class="tab" role="tab" id="tab-kecamatan" aria-controls="view-kecamatan" aria-selected="false" data-tab="kecamatan" type="button">Kecamatan</button>
+            <button class="tab" role="tab" id="tab-docs" aria-controls="view-docs" aria-selected="false" data-tab="docs" type="button">Docs</button>
+            <button class="tab" role="tab" id="tab-lapor" aria-controls="view-lapor" aria-selected="false" data-tab="lapor" type="button">Lapor</button>
+          </div>
+          <div class="nav-util" aria-label="Tautan proyek">
+            <a class="util-btn sponsor-btn" href="https://github.com/sponsors/sukirman1901" target="_blank" rel="noopener noreferrer" title="Donate Atlas Bojonegoro">
+              <svg class="sponsor-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 20.5s-7.25-4.35-7.25-9.1A4.15 4.15 0 0 1 12 7.55a4.15 4.15 0 0 1 7.25 3.85C19.25 16.15 12 20.5 12 20.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+              <span class="sponsor-btn-label">Donate</span>
+            </a>
+            <a class="util-btn gh-btn" href="https://github.com/sukirman1901/atlas-bojonegoro" target="_blank" rel="noopener noreferrer" title="GitHub Atlas Bojonegoro" data-gh-btn>
+              <span class="gh-btn-label">GitHub</span>
+              <span class="gh-btn-sep" aria-hidden="true"></span>
+              <svg class="gh-btn-star" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2.5l2.74 6.53 7.01.58-5.3 4.6 1.6 6.79L12 17.77l-6.05 3.23 1.6-6.79-5.3-4.6 7.01-.58L12 2.5z"/>
+              </svg>
+              <span class="gh-btn-count" aria-label="Jumlah bintang">0</span>
+            </a>
+          </div>
+        </nav>
+      </div>
       <div class="utilities">
         <button type="button" class="icon-btn theme-btn" id="theme-btn" aria-label="Ganti ke tema gelap" title="Tema">
           <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -726,7 +141,21 @@
             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C12.4142 1.25 12.75 1.58579 12.75 2V4C12.75 4.41421 12.4142 4.75 12 4.75C11.5858 4.75 11.25 4.41421 11.25 4V2C11.25 1.58579 11.5858 1.25 12 1.25ZM3.66865 3.71609C3.94815 3.41039 4.42255 3.38915 4.72825 3.66865L6.95026 5.70024C7.25596 5.97974 7.2772 6.45413 6.9977 6.75983C6.7182 7.06553 6.2438 7.08677 5.9381 6.80727L3.71609 4.77569C3.41039 4.49619 3.38915 4.02179 3.66865 3.71609ZM20.3314 3.71609C20.6109 4.02179 20.5896 4.49619 20.2839 4.77569L18.0619 6.80727C17.7562 7.08677 17.2818 7.06553 17.0023 6.75983C16.7228 6.45413 16.744 5.97974 17.0497 5.70024L19.2718 3.66865C19.5775 3.38915 20.0518 3.41039 20.3314 3.71609ZM12 7.75C9.65279 7.75 7.75 9.65279 7.75 12C7.75 14.3472 9.65279 16.25 12 16.25C14.3472 16.25 16.25 14.3472 16.25 12C16.25 9.65279 14.3472 7.75 12 7.75ZM6.25 12C6.25 8.82436 8.82436 6.25 12 6.25C15.1756 6.25 17.75 8.82436 17.75 12C17.75 15.1756 15.1756 17.75 12 17.75C8.82436 17.75 6.25 15.1756 6.25 12ZM1.25 12C1.25 11.5858 1.58579 11.25 2 11.25H4C4.41421 11.25 4.75 11.5858 4.75 12C4.75 12.4142 4.41421 12.75 4 12.75H2C1.58579 12.75 1.25 12.4142 1.25 12ZM19.25 12C19.25 11.5858 19.5858 11.25 20 11.25H22C22.4142 11.25 22.75 11.5858 22.75 12C22.75 12.4142 22.4142 12.75 22 12.75H20C19.5858 12.75 19.25 12.4142 19.25 12ZM17.0255 17.0252C17.3184 16.7323 17.7933 16.7323 18.0862 17.0252L20.3082 19.2475C20.6011 19.5404 20.601 20.0153 20.3081 20.3082C20.0152 20.6011 19.5403 20.601 19.2475 20.3081L17.0255 18.0858C16.7326 17.7929 16.7326 17.3181 17.0255 17.0252ZM6.97467 17.0253C7.26756 17.3182 7.26756 17.7931 6.97467 18.086L4.75244 20.3082C4.45955 20.6011 3.98468 20.6011 3.69178 20.3082C3.39889 20.0153 3.39889 19.5404 3.69178 19.2476L5.91401 17.0253C6.2069 16.7324 6.68177 16.7324 6.97467 17.0253ZM12 19.25C12.4142 19.25 12.75 19.5858 12.75 20V22C12.75 22.4142 12.4142 22.75 12 22.75C11.5858 22.75 11.25 22.4142 11.25 22V20C11.25 19.5858 11.5858 19.25 12 19.25Z" fill="currentColor"/>
           </svg>
         </button>
-        <button class="tab tab-cta" role="tab" id="tab-lapor" aria-controls="view-lapor" aria-selected="false" data-tab="lapor" type="button">Lapor</button>
+        <a class="util-btn sponsor-btn util-desktop" href="https://github.com/sponsors/sukirman1901" target="_blank" rel="noopener noreferrer" title="Donate Atlas Bojonegoro">
+          <svg class="sponsor-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 20.5s-7.25-4.35-7.25-9.1A4.15 4.15 0 0 1 12 7.55a4.15 4.15 0 0 1 7.25 3.85C19.25 16.15 12 20.5 12 20.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          <span class="sponsor-btn-label">Donate</span>
+        </a>
+        <a class="util-btn gh-btn util-desktop" href="https://github.com/sukirman1901/atlas-bojonegoro" target="_blank" rel="noopener noreferrer" title="GitHub Atlas Bojonegoro" data-gh-btn>
+          <span class="gh-btn-label">GitHub</span>
+          <span class="gh-btn-sep" aria-hidden="true"></span>
+          <svg class="gh-btn-star" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2.5l2.74 6.53 7.01.58-5.3 4.6 1.6 6.79L12 17.77l-6.05 3.23 1.6-6.79-5.3-4.6 7.01-.58L12 2.5z"/>
+          </svg>
+          <span class="gh-btn-count" aria-label="Jumlah bintang">0</span>
+        </a>
+        <button type="button" class="tab-cta" data-go-tab="lapor">Lapor</button>
         <button type="button" class="icon-btn nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Buka menu">
           <span aria-hidden="true"></span>
         </button>
@@ -735,175 +164,253 @@
   </header>
   <div class="nav-scrim" id="nav-scrim" hidden></div>
 
-  <main id="isi" class="wrap">
-    <section class="stats" id="stats" aria-label="Ringkasan"></section>
-
-    <section class="view" id="view-peta" role="tabpanel" aria-labelledby="tab-peta">
-      <div class="map-layout">
-        <div>
-          <div id="map" role="application" aria-label="Peta 28 kecamatan Bojonegoro"></div>
-          <p class="legend" id="map-legend"></p>
-        </div>
-        <aside class="map-side" id="map-side">
-          <h2>Pilih kecamatan</h2>
-          <p>Klik wilayah di peta. Warna menunjukkan jumlah isu di kecamatan itu.</p>
-        </aside>
+  <div class="wrap app-frame">
+    <aside class="rail-left" id="rail-left" aria-label="Menu samping" hidden>
+      <div class="aside-panel" data-aside="docs">
+        <p class="rail-group">Pengantar</p>
+        <a class="rail-link" href="#doc-apa-itu">Apa itu Atlas Bojonegoro</a>
+        <a class="rail-link" href="#doc-siapa">Siapa yang membuat &amp; untuk siapa</a>
+        <p class="rail-group">Membaca atlas</p>
+        <a class="rail-link" href="#doc-membaca">Peta, Daftar, Kecamatan</a>
+        <a class="rail-link" href="#doc-ringkasan">Angka ringkasan</a>
+        <a class="rail-link" href="#doc-warna">Warna peta</a>
+        <p class="rail-group">Bahasa atlas</p>
+        <a class="rail-link" href="#doc-prioritas">Prioritas</a>
+        <a class="rail-link" href="#doc-tipe">Tuduhan &amp; tipe</a>
+        <a class="rail-link" href="#doc-sentimen">Sentimen</a>
+        <a class="rail-link" href="#doc-verifikasi">Verifikasi</a>
+        <a class="rail-link" href="#doc-matriks">Matriks</a>
+        <p class="rail-group">Ikut serta</p>
+        <a class="rail-link" href="#doc-lapor">Cara lapor</a>
+        <a class="rail-link" href="#doc-sumber">Sumber &amp; batas</a>
       </div>
-    </section>
+    </aside>
 
-    <section class="view" id="view-daftar" role="tabpanel" aria-labelledby="tab-daftar" hidden inert>
-      <div class="toolbar" id="toolbar"></div>
-      <div id="laporan-desk"></div>
-      <div class="matrix" id="matrix" hidden></div>
-      <p id="hasil-meta" class="muted" style="margin:0.75rem 0"></p>
-      <div class="table-wrap" id="table-wrap"></div>
-    </section>
+    <div class="app-center">
+      <main id="isi">
+        <section class="stats" id="stats" aria-label="Ringkasan"></section>
 
-    <section class="view" id="view-kecamatan" role="tabpanel" aria-labelledby="tab-kecamatan" hidden inert>
-      <p class="hint">28 kecamatan selalu tampil, termasuk yang belum ada isu. Klik baris untuk membuka daftar tersaring.</p>
-      <div class="table-wrap table-kec" style="margin-top:0.75rem">
-        <table>
-          <thead>
-            <tr>
-              <th>Kecamatan</th>
-              <th>Isu</th>
-              <th>P1</th>
-              <th>Tuduhan</th>
-              <th>Verifikasi tertunda</th>
-            </tr>
-          </thead>
-          <tbody id="kec-body"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="view" id="view-docs" role="tabpanel" aria-labelledby="tab-docs" hidden inert>
-      <article class="docs">
-        <div class="docs-intro">
-          <p class="docs-kicker">Docs</p>
-          <h2 class="docs-lede">Kalau P1, Tuduhan, sentimen, atau verifikasi di Peta, Daftar, atau Kecamatan tidak jelas, buka pertanyaannya.</h2>
-          <div class="docs-cta">
-            <button type="button" class="btn btn-primary" data-go-tab="lapor">Buat Laporan</button>
+        <section class="view" id="view-peta" role="tabpanel" aria-labelledby="tab-peta">
+          <div class="map-layout">
+            <div class="map-stage">
+              <div id="map" role="application" aria-label="Peta 28 kecamatan Bojonegoro"></div>
+              <div class="map-basemap" role="group" aria-label="Latar peta" id="map-basemap">
+                <button type="button" class="btn" data-basemap="light" aria-pressed="true">Terang</button>
+                <button type="button" class="btn" data-basemap="streets" aria-pressed="false">Jalan</button>
+                <button type="button" class="btn" data-basemap="satellite" aria-pressed="false">Satelit</button>
+              </div>
+            </div>
+            <p class="legend" id="map-legend"></p>
           </div>
-        </div>
-        <div class="faq-list">
-          <details class="faq-item" name="docs-faq">
-            <summary>Bagaimana cara lapor?</summary>
-            <div class="faq-body">
+        </section>
+
+        <section class="view" id="view-daftar" role="tabpanel" aria-labelledby="tab-daftar" hidden inert>
+          <div class="toolbar" id="toolbar"></div>
+          <div id="laporan-desk"></div>
+          <div class="matrix" id="matrix" hidden></div>
+          <p id="hasil-meta" class="muted" style="margin:0.75rem 0"></p>
+          <div class="table-wrap" id="table-wrap"></div>
+        </section>
+
+        <section class="view" id="view-kecamatan" role="tabpanel" aria-labelledby="tab-kecamatan" hidden inert>
+          <div class="toolbar toolbar-kec" id="toolbar-kec">
+            <label class="field search search-kec"><span class="visually-hidden">Cari kecamatan</span><input id="kec-q" type="search" value="" placeholder="Nama kecamatan" autocomplete="off" aria-label="Cari kecamatan"></label>
+          </div>
+          <p id="kec-meta" class="muted" style="margin:0.35rem 0 0.75rem"></p>
+          <div class="table-wrap table-kec">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kecamatan</th>
+                  <th>Isu</th>
+                  <th>P1</th>
+                  <th>Tuduhan</th>
+                  <th>Verifikasi tertunda</th>
+                </tr>
+              </thead>
+              <tbody id="kec-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="view" id="view-docs" role="tabpanel" aria-labelledby="tab-docs" hidden inert>
+          <article class="docs">
+            <section class="docs-section" id="doc-apa-itu">
+              <h2>Apa itu Atlas Bojonegoro</h2>
+              <p>Atlas Bojonegoro adalah situs publik untuk melihat isu urusan publik di Kabupaten Bojonegoro: di peta, di daftar, dan per kecamatan.</p>
+              <p>Isinya disusun manusia dari sumber terbuka, lalu ditata agar mudah disaring dan dicek ulang — bukan umpan berita otomatis.</p>
+            </section>
+
+            <section class="docs-section" id="doc-siapa">
+              <h2>Siapa yang membuat &amp; untuk siapa</h2>
+              <p>Atlas dipakai warga yang ingin memahami isu di wilayahnya, dan redaksi yang menata serta memverifikasi entri.</p>
+              <p>Siapa pun boleh membaca. Mengirim laporan tidak wajib menulis nama.</p>
+            </section>
+
+            <section class="docs-section" id="doc-membaca">
+              <h2>Peta, Daftar, Kecamatan</h2>
+              <p><strong>Peta</strong> menampilkan 28 kecamatan. Warna mengikuti jumlah isu yang sudah dipetakan di wilayah itu.</p>
+              <p><strong>Daftar</strong> adalah inventaris isu yang bisa disaring (cari, kategori, kecamatan, verifikasi, sentimen) dan diurutkan.</p>
+              <p><strong>Kecamatan</strong> merangkum hitungan per wilayah. Klik baris untuk membuka Daftar yang sudah tersaring ke kecamatan itu.</p>
+            </section>
+
+            <section class="docs-section" id="doc-ringkasan">
+              <h2>Angka ringkasan di Peta</h2>
+              <p>Di atas peta ada kartu ringkas:</p>
+              <ul>
+                <li><strong>Isu</strong> — semua entri inventaris.</li>
+                <li><strong>Terbit</strong> — lolos cek redaksi.</li>
+                <li><strong>Verifikasi tertunda</strong> — belum terbit dan belum ditolak sebagai iklan.</li>
+                <li><strong>Sudah dipetakan</strong> — punya nama kecamatan.</li>
+                <li><strong>Laporan baru</strong> — antrian warga yang belum jadi isu.</li>
+              </ul>
+            </section>
+
+            <section class="docs-section" id="doc-warna">
+              <h2>Warna di peta</h2>
+              <p>Semakin banyak isu terpetakan di sebuah kecamatan, semakin kuat warna hangatnya (kuning → merah, skala legenda di bawah peta). Skala yang sama dipakai sel dampak/urgensi di tabel matriks.</p>
+              <p>Isu yang ditolak sebagai iklan tidak dihitung ke warna. Klik wilayah untuk menyaring daftar.</p>
+            </section>
+
+            <section class="docs-section" id="doc-prioritas">
+              <h2>Prioritas (P1–P5)</h2>
+              <p>Skor prioritas = dampak (1–5) × urgensi (1–5), hasil 1–25. Di daftar terlihat seperti <strong>P1/16</strong>: jenjang P1, skor 16.</p>
+              <p><strong>P1</strong> skor 12 ke atas — paling mendesak untuk dipantau, bukan vonis bersalah. P2 skor 9–11, P3 6–8, P4 4–5, P5 di bawah itu.</p>
+            </section>
+
+            <section class="docs-section" id="doc-tipe">
+              <h2>Tuduhan, Fakta, dan tipe lain</h2>
+              <p><strong>Tuduhan</strong> — isu dari sumber terbuka yang belum ada keputusan resmi. Catatan tuduhan, bukan vonis.</p>
+              <p><strong>Fakta</strong> — peristiwa yang sumbernya menyebut hal yang sudah terjadi atau diumumkan.</p>
+              <p>Agenda, prestasi, dan kebijakan menandai rencana, capaian yang diklaim, atau aturan — bukan pujian atau celaan dari atlas.</p>
+            </section>
+
+            <section class="docs-section" id="doc-sentimen">
+              <h2>Sentimen</h2>
+              <p>Negatif, positif, netral, atau kontroversi mencatat nada isu di sumber. Bukan penilaian moral atlas terhadap orang atau instansi.</p>
+              <p>Filter Sentimen di Daftar memakai nilai ini.</p>
+            </section>
+
+            <section class="docs-section" id="doc-verifikasi">
+              <h2>Status verifikasi</h2>
+              <ul>
+                <li><strong>Belum dicek</strong> — redaksi belum meninjau.</li>
+                <li><strong>Tautan valid / sumber kedua</strong> — URL bisa dibuka, atau ada konfirmasi lain.</li>
+                <li><strong>Ditolak (iklan)</strong> — konten berbayar; tidak dihitung di warna peta.</li>
+                <li><strong>Terbit</strong> — layak tampil sebagai isu atlas; kecamatan wajib diisi.</li>
+              </ul>
+            </section>
+
+            <section class="docs-section" id="doc-matriks">
+              <h2>Matriks prioritas</h2>
+              <p>Tombol di tab Daftar. Tabel ringkas: jenjang, skor, dampak, urgensi, tipe, dan judul — sampai 24 isu teratas dari saringan yang sedang aktif.</p>
+              <p>Warna sel menandai angka dampak/urgensi, bukan kategori hukum.</p>
+            </section>
+
+            <section class="docs-section" id="doc-lapor">
+              <h2>Cara lapor</h2>
               <ol>
-                <li>Buka tab <strong>Lapor</strong>, pilih kecamatan dan kategori, tulis apa yang terjadi (minimal 20 karakter). Tautan bukti boleh kosong.</li>
+                <li>Buka <strong>Lapor</strong> di header, pilih kecamatan dan kategori, tulis apa yang terjadi (minimal 20 karakter). Tautan bukti boleh kosong.</li>
                 <li>Tekan <strong>Kirim laporan</strong>. Isian masuk antrian redaksi.</li>
                 <li>Redaksi menandai: baru → dicek → jadi isu, atau ditolak.</li>
               </ol>
-              <p>Ini bukan kanal darurat, polisi, atau pemadam kebakaran.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>P1 itu apa?</summary>
-            <div class="faq-body">
-              <p>Skor prioritas = dampak (1–5) × urgensi (1–5), hasil 1–25. Di daftar tertulis misalnya <strong>P1/16</strong>: jenjang P1, skor 16.</p>
-              <p><strong>P1</strong> skor 12 ke atas — isu yang redaksi anggap paling mendesak untuk dipantau, bukan “sudah terbukti bersalah”. P2 skor 9–11, P3 6–8, P4 4–5, P5 di bawah itu.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>Apa arti Tuduhan?</summary>
-            <div class="faq-body">
-              <p><strong>Tuduhan</strong> = isu dari sumber terbuka yang belum ada keputusan resmi. Catatan tuduhan, bukan vonis. Kolom itu di tabel Kecamatan menghitung isu bertipe ini.</p>
-              <p><strong>Fakta</strong> = peristiwa yang sumbernya menyebut hal yang sudah terjadi atau diumumkan. Agenda, prestasi, dan kebijakan adalah rencana, capaian yang diklaim, atau aturan — bukan pujian atau celaan dari atlas.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>Negatif dan sentimen maksudnya apa?</summary>
-            <div class="faq-body">
-              <p>Negatif, positif, netral, atau kontroversi adalah nada isu di sumber yang dicatat. Bukan penilaian moral atlas terhadap orang atau instansi. Filter Sentimen di Daftar memakai nilai ini.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>Matriks prioritas itu apa?</summary>
-            <div class="faq-body">
-              <p>Tombol di tab Daftar. Tabel ringkas: jenjang (P1–P5), skor, dampak, urgensi, tipe, dan judul — sampai 24 isu teratas dari saringan yang sedang aktif. Warna sel menandai angka dampak/urgensi, bukan kategori hukum.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>Angka ringkasan di Peta artinya apa?</summary>
-            <div class="faq-body">
-              <p><strong>Isu</strong> = semua entri inventaris. <strong>Terbit</strong> = lolos cek redaksi. <strong>Verifikasi tertunda</strong> = belum terbit dan belum ditolak sebagai iklan. <strong>Sudah dipetakan</strong> = punya nama kecamatan. <strong>Laporan baru</strong> = antrian warga yang belum jadi isu.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>Status verifikasi itu apa?</summary>
-            <div class="faq-body">
-              <p><strong>Belum dicek</strong> — redaksi belum meninjau. <strong>Tautan valid / sumber kedua</strong> — URL bisa dibuka, atau ada konfirmasi lain. <strong>Ditolak (iklan)</strong> — konten berbayar; tidak dihitung di warna peta. <strong>Terbit</strong> — layak tampil sebagai isu atlas; kecamatan wajib diisi.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>Warna di peta artinya apa?</summary>
-            <div class="faq-body">
-              <p>Warna wilayah mengikuti jumlah isu yang dipetakan di kecamatan itu, kecuali yang ditolak sebagai iklan. Klik wilayah untuk menyaring daftar. 28 kecamatan selalu ada di tab Kecamatan, termasuk yang nol isu.</p>
-            </div>
-          </details>
-          <details class="faq-item" name="docs-faq">
-            <summary>Situs ini menarik berita sendiri?</summary>
-            <div class="faq-body">
-              <p>Tidak. Data dimasukkan manusia ke repositori. Bukan crawler, bukan pengganti laporan polisi.</p>
-            </div>
-          </details>
-        </div>
-      </article>
-    </section>
+              <p>Ini bukan kanal darurat, polisi, atau pemadam kebakaran. Jangan tulis data pribadi.</p>
+            </section>
 
-    <section class="view" id="view-lapor" role="tabpanel" aria-labelledby="tab-lapor" hidden inert>
-      <article class="docs">
-        <div class="docs-intro">
-          <p class="docs-kicker">Lapor</p>
-          <h2 class="docs-lede">Kalau Anda melihat isu publik di Kabupaten Bojonegoro, isi formulir. Nama tidak diminta. Jangan tulis data pribadi — antrian redaksi terbuka. Bukan kanal darurat.</h2>
+            <section class="docs-section" id="doc-sumber">
+              <h2>Sumber data &amp; batas atlas</h2>
+              <p>Data dimasukkan manusia ke repositori dari sumber terbuka (media, pengumuman, laporan warga yang lolos redaksi). Bukan crawler yang menarik berita sendiri.</p>
+              <p>Atlas membantu memantau isu publik. Bukan pengganti laporan polisi atau saluran resmi pemerintah untuk pengaduan darurat.</p>
+            </section>
+          </article>
+        </section>
+
+        <section class="view" id="view-lapor" role="tabpanel" aria-labelledby="tab-lapor" hidden inert>
+          <article class="lapor-page">
+            <form class="form-grid" id="form-lapor" novalidate>
+              <div class="field">
+                <span class="field-label" id="lapor-kec-label">Kecamatan</span>
+                <div class="select" id="lapor-kec"></div>
+                <p class="field-error" id="lapor-kec-err" hidden></p>
+              </div>
+              <div class="field">
+                <span class="field-label" id="lapor-kat-label">Kategori</span>
+                <div class="select" id="lapor-kat"></div>
+                <p class="field-error" id="lapor-kat-err" hidden></p>
+              </div>
+              <label class="field" for="lapor-uraian">
+                <span class="field-label">Uraian</span>
+                <textarea id="lapor-uraian" name="uraian" required minlength="20" maxlength="4000" placeholder="Apa yang terjadi, di mana, kapan, siapa yang terlibat. Minimal 20 karakter." aria-describedby="lapor-uraian-err"></textarea>
+                <p class="field-error" id="lapor-uraian-err" hidden></p>
+              </label>
+              <label class="field" for="lapor-url">
+                <span class="field-label">Tautan bukti (opsional)</span>
+                <input id="lapor-url" name="url_bukti" type="url" placeholder="https://" aria-describedby="lapor-url-err">
+                <p class="field-error" id="lapor-url-err" hidden></p>
+              </label>
+              <div class="hp" aria-hidden="true">
+                <label>Situs web <input type="text" name="website" id="lapor-website" tabindex="-1" autocomplete="off"></label>
+              </div>
+              <p class="form-msg" id="lapor-error" role="alert" hidden></p>
+              <p class="form-msg form-msg-ok" id="lapor-ok" role="status" hidden></p>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit" id="lapor-submit">Kirim laporan</button>
+              </div>
+            </form>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <aside class="rail-aside" id="rail-aside" aria-label="Panel samping">
+      <div class="aside-panel" data-aside="peta">
+        <div class="map-side-card">
+          <p class="aside-kicker">Peta</p>
+          <div class="map-side" id="map-side">
+            <h2>Pilih kecamatan</h2>
+            <p>Klik wilayah di peta. Warna menunjukkan jumlah isu di kecamatan itu.</p>
+          </div>
         </div>
-        <form class="form-grid" id="form-lapor" novalidate>
-          <div class="field">
-            <span class="field-label" id="lapor-kec-label">Kecamatan</span>
-            <div class="select" id="lapor-kec"></div>
-            <p class="field-error" id="lapor-kec-err" hidden></p>
-          </div>
-          <div class="field">
-            <span class="field-label" id="lapor-kat-label">Kategori</span>
-            <div class="select" id="lapor-kat"></div>
-            <p class="field-error" id="lapor-kat-err" hidden></p>
-          </div>
-          <label class="field" for="lapor-uraian">
-            <span class="field-label">Uraian</span>
-            <textarea id="lapor-uraian" name="uraian" required minlength="20" maxlength="4000" placeholder="Apa yang terjadi, di mana, kapan, siapa yang terlibat. Minimal 20 karakter." aria-describedby="lapor-uraian-err"></textarea>
-            <p class="field-error" id="lapor-uraian-err" hidden></p>
-          </label>
-          <label class="field" for="lapor-url">
-            <span class="field-label">Tautan bukti (opsional)</span>
-            <input id="lapor-url" name="url_bukti" type="url" placeholder="https://" aria-describedby="lapor-url-err">
-            <p class="field-error" id="lapor-url-err" hidden></p>
-          </label>
-          <div class="hp" aria-hidden="true">
-            <label>Situs web <input type="text" name="website" id="lapor-website" tabindex="-1" autocomplete="off"></label>
-          </div>
-          <p class="form-msg" id="lapor-error" role="alert" hidden></p>
-          <p class="form-msg form-msg-ok" id="lapor-ok" role="status" hidden></p>
-          <div class="form-actions">
-            <button class="btn btn-primary" type="submit" id="lapor-submit">Kirim laporan</button>
-          </div>
-        </form>
-      </article>
-    </section>
-  </main>
+      </div>
+      <div class="aside-panel" data-aside="docs" hidden>
+        <p class="aside-kicker">Di halaman ini</p>
+        <nav aria-label="Di halaman ini">
+          <ul class="toc">
+            <li><a href="#doc-apa-itu">Apa itu Atlas Bojonegoro</a></li>
+            <li><a href="#doc-siapa">Siapa yang membuat &amp; untuk siapa</a></li>
+            <li><a href="#doc-membaca">Peta, Daftar, Kecamatan</a></li>
+            <li><a href="#doc-ringkasan">Angka ringkasan di Peta</a></li>
+            <li><a href="#doc-warna">Warna di peta</a></li>
+            <li><a href="#doc-prioritas">Prioritas (P1–P5)</a></li>
+            <li><a href="#doc-tipe">Tuduhan, Fakta, dan tipe lain</a></li>
+            <li><a href="#doc-sentimen">Sentimen</a></li>
+            <li><a href="#doc-verifikasi">Status verifikasi</a></li>
+            <li><a href="#doc-matriks">Matriks prioritas</a></li>
+            <li><a href="#doc-lapor">Cara lapor</a></li>
+            <li><a href="#doc-sumber">Sumber data &amp; batas atlas</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="aside-panel" data-aside="lapor" hidden>
+        <div class="map-side-card">
+          <p class="aside-kicker">Lapor</p>
+          <h2>Sebelum kirim</h2>
+          <p>Jangan tulis data pribadi. Antrian redaksi terbuka di GitHub. Bukan kanal darurat atau polisi.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="wrap site-footer">
+    Inventaris isu &amp; pemantauan urusan publik Kabupaten Bojonegoro. Batas wilayah: Badan Informasi Geospasial. MIT.
+  </footer>
 
   <div class="drawer-root" id="drawer-root" hidden>
     <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"></div>
   </div>
 
-  <footer>
-    <div class="wrap">
-      Inventaris isu & pemantauan urusan publik Kabupaten Bojonegoro. Batas wilayah: Badan Informasi Geospasial. MIT.
-    </div>
-  </footer>
-
   <script src="data/isu.js?v=kirim-lapor"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="app.js?v=token-error"></script>
+  <script src="app.js?v=map-light-esri"></script>
 </body>
 </html>

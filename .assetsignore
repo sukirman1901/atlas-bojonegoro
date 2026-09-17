@@ -11,6 +11,10 @@ worker
 worker/**
 scripts
 scripts/**
+prototype
+prototype/**
+docs
+docs/**
 *.mjs
 wrangler.jsonc
 wrangler.toml
@@ -22,3 +26,13 @@ LICENSE
 README.md
 package.json
 package-lock.json
+*-check.png
+*-check2.png
+*-check3.png
+daftar-messy.png
+shell3-docs.png
+reicon-match-docs.png
+icon-optical-*.png
+map-warm*.png
+matrix-warm*.png
+map-topo*.png
