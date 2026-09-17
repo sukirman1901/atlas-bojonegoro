@@ -1,0 +1,48 @@
+tier,prioritas,dampak,urgensi,judul,kategori,grup,status_enum,tipe,aktor
+P1,16,4,4,"Dugaan korupsi jalan Desa Klino Rp2,7 M",Hukum & Korupsi,,Proses hukum,Tuduhan,Kejari Bojonegoro; Nurul Azizah
+P1,16,4,4,Dugaan korupsi BKKD 2025 di 12 desa,Hukum & Korupsi,,Proses hukum,Tuduhan,Kejari Bojonegoro
+P1,16,4,4,Bendungan Karangnongko terancam mangkrak,Infrastruktur & Energi,,Belum tuntas,Fakta,BPK RI; Pemkab
+P1,16,4,4,Krisis lapangan kerja,Ekonomi & Pangan,,Berjalan,Fakta,Disnaker; Pemkab
+P1,16,4,4,"Tanggap darurat kekeringan, 77.000 liter air bersih",Bencana & Lingkungan,,Darurat,Fakta,Kodim 0813; BPBD
+P1,12,4,3,Petani: 'rencana hanya jadi kertas' di musim kemarau,Bencana & Lingkungan,,Berjalan,Fakta,Petani; Dinas Pertanian
+P2,9,3,3,Sengketa lahan RPH Banjarsari masuk jalur pidana,Hukum & Korupsi,,Proses hukum,Tuduhan,Ahli waris Hadi Subandriono; Pemkab
+P2,9,3,3,RSUD Temayang belum beroperasi penuh,Sosial & Kesehatan,,Belum tuntas,Fakta,Dinkes; RSUD
+P2,9,3,3,"Daging sapi langka, pedagang jagal tutup usaha",Ekonomi & Pangan,,Berjalan,Fakta,Disnakkan; pedagang
+P2,9,3,3,Bansos stunting baru tersalur separuh,Sosial & Kesehatan,,Berjalan,Fakta,Dinsos; Dinkes
+P3,6,3,2,"Kades Drokilo tersangka korupsi dana desa Rp1,4 M",Hukum & Korupsi,,Proses hukum,Fakta,Kejari Bojonegoro
+P3,6,3,2,Eks camat jadi tersangka korupsi BKKD,Hukum & Korupsi,,Proses hukum,Fakta,Kejari Bojonegoro
+P3,6,3,2,MBG wajib dikonsumsi di sekolah,Sosial & Kesehatan,,Berjalan,Kebijakan,SPPG; Dinas Pendidikan
+P3,6,3,2,Kecelakaan bus Dali Prima vs Avanza,Kamtibmas & Laka,,Selesai,Fakta,Polantas
+P3,6,2,3,Capaian DTSEN 99%,Pemerintahan,,Selesai,Prestasi,Pemkab Bojonegoro
+P3,6,2,3,Bejo Career Day (bursa kerja),Ekonomi & Pangan,,Berjalan,Agenda,Disnaker; Pemkab
+P3,6,2,3,Peringatan angin kencang BMKG,Bencana & Lingkungan,,Peringatan,Fakta,BMKG
+P4,4,2,2,Dialog 'Sapa Bupati' menata kota,Pemerintahan,,Berjalan,Agenda,Setyo Wahono; Nurul Azizah
+P4,4,2,2,Raperda Trantibum & Linmas,Pemerintahan,,Belum tuntas,Kebijakan,DPRD; Satpol PP
+P4,4,2,2,Parkir QRIS plat luar daerah & lapak liar,Ekonomi & Pangan,,Berjalan,Fakta,Dishub; Satpol PP
+P4,4,2,2,Operasi Pekat: pesta miras di rumah kos,Sosial & Kesehatan,,Berjalan,Fakta,Satpol PP
+P4,4,2,2,Kenakalan remaja,Sosial & Kesehatan,,Berjalan,Fakta,Polres; Pemkab
+P4,4,2,2,Regulasi sound horeg,Sosial & Kesehatan,,Wacana,Kebijakan,DPRD; Satpol PP
+P4,4,2,2,Kebakaran Dander,Bencana & Lingkungan,Kebakaran (4 peristiwa),Selesai,Fakta,Damkar
+P4,4,2,2,Kebakaran SMKN 1 Baureno,Bencana & Lingkungan,Kebakaran (4 peristiwa),Selesai,Fakta,Damkar
+P4,4,2,2,Kebakaran Temayang,Bencana & Lingkungan,Kebakaran (4 peristiwa),Selesai,Fakta,Damkar
+P4,4,2,2,Kebakaran Dengok–Padangan,Bencana & Lingkungan,Kebakaran (4 peristiwa),Selesai,Fakta,Damkar
+P4,4,2,2,Innova terperosok di jalan Bojonegoro–Ngawi,Kamtibmas & Laka,,Selesai,Fakta,Polantas
+P5,2,2,1,Penutupan TMMD ke-129 Kedungadem,Infrastruktur & Energi,,Selesai,Prestasi,Kodim 0813; Pemkab
+P5,2,2,1,"Panen tembakau, harga petani membaik",Ekonomi & Pangan,,Berjalan,Fakta,Dinas Pertanian
+P5,2,2,1,Sentra peternakan rakyat (SPR) Mega Jaya Kasiman,Ekonomi & Pangan,,Berjalan,Prestasi,Pemkab
+P5,2,2,1,Survei seismik migas Bubulan,Infrastruktur & Energi,,Berjalan,Fakta,Pertamina; Pemkab
+P5,2,2,1,Temuan mayat di Malo,Kamtibmas & Laka,Temuan mayat (2 peristiwa),Proses hukum,Fakta,Polres
+P5,2,2,1,Temuan mayat di Kalitidu,Kamtibmas & Laka,Temuan mayat (2 peristiwa),Proses hukum,Fakta,Polres
+P5,2,1,2,Kemenham minta produk hukum daerah perhatikan HAM,Pemerintahan,,Wacana,Kebijakan,Kemenham Jatim; Pemkab
+P5,1,1,1,Rapat paripurna DPRD,Pemerintahan,,Selesai,Agenda,Abdullah Umar; Setyo Wahono; Nurul Azizah
+P5,1,1,1,Jaringan gas kota (jargas) bersama BPH Migas,Infrastruktur & Energi,,Berjalan,Kebijakan,BPH Migas; Pemkab
+P5,1,1,1,"Sertipikat aset KAI Daop 8 senilai Rp142,16 M",Pemerintahan,,Selesai,Prestasi,KAI; BPN
+P5,1,1,1,Reakreditasi RSUD Padangan,Sosial & Kesehatan,,Belum tuntas,Prestasi,RSUD Padangan
+P5,1,1,1,Anggrek langka di hutan jati,Bencana & Lingkungan,,Berjalan,Fakta,Komunitas; Perhutani
+P5,1,1,1,Konser NDX AKA di GOR Dabonsia,Agenda & Prestasi,,Terjadwal,Agenda,Polantas; EO
+P5,1,1,1,Sunthai Street Food Festival KDS (18–27 Sep),Agenda & Prestasi,,Terjadwal,Agenda,Pemkab; EO
+P5,1,1,1,HUT Bojonegoro & Sarasehan Budaya,Agenda & Prestasi,,Terjadwal,Agenda,Pemkab
+P5,1,1,1,MTQ 2026,Agenda & Prestasi,,Terjadwal,Agenda,Pemkab
+P5,1,1,1,PKKMB Unigoro 1.075 mahasiswa,Agenda & Prestasi,,Selesai,Agenda,Unigoro
+P5,1,1,1,Jamsostek Award peringkat 2 Jatim,Agenda & Prestasi,,Selesai,Prestasi,BPJS Ketenagakerjaan; Pemkab
+P5,1,1,1,Turnamen desa pakai teknologi VAR,Agenda & Prestasi,,Berjalan,Prestasi,Pemkab

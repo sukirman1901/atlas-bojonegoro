@@ -1,0 +1,11 @@
+name = "atlas-bojonegoro-lapor"
+main = "index.js"
+compatibility_date = "2024-09-23"
+
+[vars]
+GITHUB_REPO = "sukirman1901/atlas-bojonegoro"
+ALLOWED_ORIGINS = "http://127.0.0.1:8765,http://127.0.0.1:8811,http://localhost:8765,http://localhost:8811,http://127.0.0.1:4173,http://localhost:4173"
+
+# wrangler secret put GITHUB_TOKEN
+# Dashboard: Settings → Variables → add GITHUB_TOKEN (Encrypt)
+# Opsional: pasang Custom Domain / Route `/api/lapor*` ke Worker ini
