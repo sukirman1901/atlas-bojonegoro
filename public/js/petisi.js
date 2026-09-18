@@ -100,8 +100,15 @@
     </div>`;
   }
 
+  function coverUrl(c) {
+    return "/assets/petisi/" + encodeURIComponent(c.slug || "og") + ".jpg";
+  }
+
   function campaignCard(c, n, closed) {
     return `<article class="petisi-card${closed ? " is-closed" : ""}">
+      <figure class="petisi-card-media">
+        <img src="${esc(coverUrl(c))}" alt="" width="640" height="400" loading="lazy" decoding="async" data-petisi-card-cover>
+      </figure>
       <div class="petisi-card-main">
         <h2 class="petisi-card-title">${esc(c.title)}</h2>
         <p class="petisi-card-desc">${esc(c.summary || c.demand)}</p>
@@ -144,6 +151,15 @@
       }
 
       root.innerHTML = html;
+      root.querySelectorAll("[data-petisi-card-cover]").forEach((img) => {
+        img.addEventListener(
+          "error",
+          () => {
+            img.src = "/assets/og/og-image.png";
+          },
+          { once: true }
+        );
+      });
       const byId = Object.fromEntries(rows.map((c) => [c.id, c]));
       root.querySelectorAll("[data-petisi-open]").forEach((btn) => {
         btn.addEventListener("click", () => navigate(btn.getAttribute("data-petisi-open")));

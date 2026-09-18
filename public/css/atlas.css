@@ -1282,10 +1282,8 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--fill);
-  /* Mobile: short banner, not a tall photo block */
   aspect-ratio: 16 / 9;
-  max-height: 12.5rem;
-  min-height: 0;
+  min-height: 12rem;
 }
 .petisi-hero img {
   display: block;
@@ -1412,9 +1410,6 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   .petisi-hero {
     grid-column: 1;
     grid-row: 1;
-    /* Desktop: wide strip beside the form — ~form height, not 16:9 tower */
-    aspect-ratio: 2.4 / 1;
-    max-height: 14rem;
   }
   .petisi-detail-copy {
     grid-column: 1;
@@ -1451,11 +1446,29 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  padding: 1rem;
+  padding: 0.55rem;
   box-shadow: none;
 }
 .petisi-card.is-closed { opacity: 0.9; }
-.petisi-card-main { flex: 1 1 auto; min-width: 0; }
+/* Nested radius: outer --radius, inset pad → inner ≈ outer − inset */
+.petisi-card-media {
+  margin: 0;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 0.3rem);
+  background: var(--fill);
+  aspect-ratio: 16 / 10;
+}
+.petisi-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.petisi-card-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.7rem 0.4rem 0;
+}
 .petisi-card-title {
   margin: 0 0 0.45rem;
   font-size: 1.0625rem;
@@ -1479,8 +1492,8 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   flex-direction: column;
   align-items: stretch;
   gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 0.85rem;
+  margin-top: 0.85rem;
+  padding: 0.75rem 0.4rem 0.35rem;
   border-top: 1px solid var(--line);
 }
 .petisi-card-meta {
