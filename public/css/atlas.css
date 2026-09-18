@@ -1282,8 +1282,10 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--fill);
+  /* Mobile: short banner, not a tall photo block */
   aspect-ratio: 16 / 9;
-  min-height: 12rem;
+  max-height: 12.5rem;
+  min-height: 0;
 }
 .petisi-hero img {
   display: block;
