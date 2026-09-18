@@ -2,29 +2,32 @@
 
 Backend untuk tab **Petisi**: campaign + tanda tangan terverifikasi email.
 
-## Setup
+## Setup (CLI)
 
-1. Buat project di [supabase.com](https://supabase.com).
-2. **SQL Editor** → jalankan isi `migrations/20260918_petisi.sql`.
-3. **Authentication → Providers → Email**: aktifkan Email; magic link / OTP on.
-4. **Authentication → URL configuration**
-   - Site URL: `https://atlas.nusaiba.dev`
-   - Redirect URLs:  
-     `https://atlas.nusaiba.dev/**`  
-     `http://127.0.0.1:4173/**`  
-     `http://localhost:4173/**`
-5. **Project Settings → API**: salin Project URL dan `anon` `public` key.
-6. Isi `public/js/petisi-config.js`:
+```bash
+supabase link --project-ref wvavxkdjzkdbrfgudfhl
+# saat diminta: isi Database password dari Dashboard → Settings → Database
 
-```js
-window.PETISI_CONFIG = {
-  supabaseUrl: "https://YOUR_PROJECT.supabase.co",
-  supabaseAnonKey: "YOUR_ANON_KEY",
-  enabled: true,
-};
+supabase db push
 ```
 
-`anon` key memang publik (dilindungi RLS). Jangan commit `service_role`.
+Atau tanpa CLI: **SQL Editor** di dashboard → tempel & Run isi `migrations/20260918130800_petisi.sql`.
+
+## Setup (Auth URL)
+
+Di dashboard **Authentication → URL configuration**:
+
+- Site URL: `https://atlas.nusaiba.dev`
+- Redirect URLs:  
+  `https://atlas.nusaiba.dev/**`  
+  `http://127.0.0.1:4173/**`  
+  `http://localhost:4173/**`
+
+Aktifkan **Email** (magic link / OTP).
+
+## Config situs
+
+`public/js/petisi-config.js` memakai Project URL + `anon` key (publik, dilindungi RLS). Jangan commit `service_role`.
 
 ## Seed (max 3 open)
 
