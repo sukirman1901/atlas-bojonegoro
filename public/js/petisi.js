@@ -118,6 +118,7 @@
       renderDisabled(root);
       return;
     }
+    root.closest(".petisi-page")?.classList.remove("is-detail");
     root.innerHTML = `<p class="muted" id="petisi-status">Memuat…</p>`;
     try {
       const rows = await fetchCampaigns();
@@ -181,12 +182,13 @@
         return;
       }
       const n = await countVerified(c.id);
+      const cover = "/assets/petisi/" + encodeURIComponent(c.slug) + ".jpg";
       const kecOpts = (kecamatanList || [])
         .map((k) => `<option value="${esc(k)}">${esc(k)}</option>`)
         .join("");
       const formBlock =
         c.status === "open"
-          ? `<form class="form-grid" id="form-petisi" novalidate>
+          ? `<form class="form-grid petisi-sign-form" id="form-petisi" novalidate>
               <label class="field" for="petisi-nama">
                 <span class="field-label">Nama tampil</span>
                 <input id="petisi-nama" name="nama" required minlength="2" maxlength="120" autocomplete="name">
@@ -204,26 +206,53 @@
                   ${kecOpts}
                 </select>
               </label>
+              <p class="hint petisi-sign-hint">Kami kirim tautan verifikasi ke email Anda.</p>
               <p class="form-msg" id="petisi-error" role="alert" hidden></p>
               <p class="form-msg form-msg-ok" id="petisi-ok" role="status" hidden></p>
               <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Kirim tautan verifikasi</button>
+                <button class="btn btn-primary" type="submit">${ICON_PEN}<span>Tanda Tangan</span></button>
               </div>
             </form>`
-          : `<p class="muted">Petisi ditutup. Total <strong class="num">${n}</strong> tanda tangan terverifikasi.</p>`;
+          : `<p class="muted petisi-sign-closed">Petisi ditutup. Total <strong class="num">${n}</strong> tanda tangan terverifikasi.</p>`;
 
+      root.closest(".petisi-page")?.classList.add("is-detail");
       root.innerHTML = `
         <p class="petisi-back"><button type="button" class="btn" data-petisi-back>← Daftar petisi</button></p>
-        <h1 class="lapor-title">${esc(c.demand || c.title)}</h1>
-        <p class="muted petisi-summary">${esc(c.summary)}</p>
-        <p class="petisi-count num">${n}</p>
-        <p class="muted petisi-count-label">tanda tangan terverifikasi</p>
-        <p class="muted petisi-target">Target: ${esc(c.target_label || "—")}${
-          c.isu_id ? ` · isu #${esc(c.isu_id)}` : ""
-        }</p>
-        ${formBlock}`;
+        <article class="petisi-detail">
+          <figure class="petisi-hero">
+            <img src="${esc(cover)}" alt="${esc(c.title)}" width="1600" height="900" decoding="async" data-petisi-cover>
+          </figure>
+          <div class="petisi-detail-grid">
+            <div class="petisi-detail-copy">
+              <h1 class="petisi-detail-title">${esc(c.title)}</h1>
+              <p class="petisi-detail-summary">${esc(c.summary)}</p>
+              <p class="petisi-detail-demand">${esc(c.demand)}</p>
+              <div class="petisi-detail-meta">
+                <p class="petisi-count num">${n}</p>
+                <p class="muted petisi-count-label">tanda tangan terverifikasi</p>
+                <p class="muted petisi-target">Target: ${esc(c.target_label || "—")}${
+                  c.isu_id ? ` · isu #${esc(c.isu_id)}` : ""
+                }</p>
+              </div>
+              <div class="petisi-detail-share">
+                <button type="button" class="petisi-pill-btn" data-petisi-share="${esc(c.id)}" aria-label="Sebarkan" title="Sebarkan">${ICON_SHARE}<span>Sebarkan</span></button>
+              </div>
+            </div>
+            <aside class="petisi-sign" aria-labelledby="petisi-sign-heading">
+              <h2 id="petisi-sign-heading" class="petisi-sign-title">Tanda tangan</h2>
+              ${formBlock}
+            </aside>
+          </div>
+        </article>`;
 
+      const coverImg = root.querySelector("[data-petisi-cover]");
+      if (coverImg) {
+        coverImg.addEventListener("error", () => {
+          coverImg.src = "/assets/og/og-image.png";
+        }, { once: true });
+      }
       root.querySelector("[data-petisi-back]")?.addEventListener("click", () => navigate(""));
+      root.querySelector("[data-petisi-share]")?.addEventListener("click", () => sharePetisi(c));
       const form = root.querySelector("#form-petisi");
       if (form) {
         form.addEventListener("submit", async (e) => {
@@ -232,6 +261,7 @@
         });
       }
     } catch (err) {
+      root.closest(".petisi-page")?.classList.remove("is-detail");
       root.innerHTML = `<p class="error">Gagal memuat petisi. ${esc(err.message || err)}</p>`;
     }
   }

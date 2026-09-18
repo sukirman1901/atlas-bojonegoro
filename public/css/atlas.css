@@ -1253,20 +1253,129 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
 }
 .petisi-page .lapor-title { margin-bottom: 0.65rem; }
 .petisi-lead { margin: 0 0 1.15rem; }
+.petisi-page.is-detail > .lapor-title,
+.petisi-page.is-detail > .petisi-lead {
+  display: none;
+}
 .petisi-closed-label { margin: 1.5rem 0 0.65rem; font-size: 0.8125rem; }
-.petisi-back { margin: 0 0 1rem; }
+.petisi-back { margin: 0 0 0.85rem; }
 .petisi-summary { margin: 0 0 1rem; }
 .petisi-count {
   font-size: 2rem; font-weight: 600; letter-spacing: -0.04em;
   margin: 0.25rem 0 0.1rem; line-height: 1.1;
 }
-.petisi-count-label { margin: 0 0 0.85rem; }
-.petisi-target { margin: 0 0 1.25rem; }
+.petisi-count-label { margin: 0 0 0.35rem; }
+.petisi-target { margin: 0; }
 .petisi-page .form-grid { margin-top: 0.25rem; max-width: 36rem; }
+.petisi-page.is-detail .form-grid { max-width: none; margin-top: 0; }
 .petisi-page select {
   width: 100%; min-height: var(--touch); padding: 0 0.75rem;
   border: 1px solid var(--line); border-radius: var(--radius-pill);
   background: var(--surface); color: var(--fg); font: inherit;
+}
+
+/* Detail: hero image → copy | sign form */
+.petisi-detail { min-width: 0; }
+.petisi-hero {
+  margin: 0 0 1.25rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--fill);
+  aspect-ratio: 2.4 / 1;
+  max-height: 22rem;
+}
+.petisi-hero img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.petisi-detail-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .petisi-detail-grid {
+    grid-template-columns: minmax(0, 1.45fr) minmax(17.5rem, 22rem);
+    gap: 1.75rem;
+  }
+}
+.petisi-detail-copy { min-width: 0; }
+.petisi-detail-title {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.petisi-detail-summary {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 40rem;
+}
+.petisi-detail-demand {
+  margin: 0 0 1.15rem;
+  padding: 0.85rem 0 0.85rem 0.95rem;
+  border-left: 3px solid var(--fg);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  max-width: 40rem;
+}
+.petisi-detail-meta { margin-bottom: 1rem; }
+.petisi-detail-meta .petisi-count { margin-top: 0; }
+.petisi-detail-share { margin-top: 0.25rem; }
+.petisi-detail-share .petisi-pill-btn {
+  width: auto;
+  min-width: 0;
+  padding-inline: 1rem;
+  flex: 0 0 auto;
+}
+.petisi-detail-share .petisi-pill-btn:not(.is-primary) {
+  width: auto;
+  min-width: 0;
+  padding-inline: 1rem;
+}
+.petisi-sign {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 1.15rem 1.15rem 1.25rem;
+  box-shadow: var(--glass-shadow);
+}
+@media (min-width: 900px) {
+  .petisi-sign {
+    position: sticky;
+    top: calc(var(--header-h) + 0.85rem);
+  }
+}
+.petisi-sign-title {
+  margin: 0 0 0.85rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.petisi-sign-hint { margin: 0; }
+.petisi-sign-closed { margin: 0; }
+.petisi-sign-form .form-actions {
+  justify-content: stretch;
+  padding-top: 0.15rem;
+}
+.petisi-sign-form .form-actions .btn-primary {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+.petisi-sign-form .btn-primary .petisi-action-icon {
+  width: 1.05rem;
+  height: 1.05rem;
 }
 
 .petisi-card-list {
