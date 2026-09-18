@@ -1269,6 +1269,7 @@
   function setTab(tab) {
     const next = TABS.includes(tab) ? tab : "peta";
     const changed = next !== state.tab;
+    const leftPetisiDetail = next === "petisi" && !state.petisiId;
     state.tab = next;
     writeUrl();
     TABS.forEach((t) => {
@@ -1279,7 +1280,7 @@
       panel.classList.remove("is-enter");
       if (on) {
         panel.removeAttribute("inert");
-        if (changed && !reduceMotion()) {
+        if ((changed || leftPetisiDetail) && !reduceMotion()) {
           void panel.offsetWidth;
           panel.classList.add("is-enter");
         }
@@ -1294,7 +1295,7 @@
     syncDocumentSeo(state.tab);
     const hideOverview = state.tab !== "peta";
     el.stats.hidden = hideOverview;
-    if (changed) {
+    if (changed || leftPetisiDetail) {
       window.scrollTo({ top: 0, behavior: reduceMotion() ? "auto" : "smooth" });
     }
     if (state.tab === "peta") {
@@ -1337,7 +1338,10 @@
   });
 
   document.querySelectorAll("[role=tab]").forEach((btn, idx, all) => {
-    btn.addEventListener("click", () => setTab(btn.dataset.tab));
+    btn.addEventListener("click", () => {
+      if (btn.dataset.tab === "petisi") state.petisiId = "";
+      setTab(btn.dataset.tab);
+    });
     btn.addEventListener("keydown", (e) => {
       const keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
       if (!keys.includes(e.key)) return;
@@ -1345,6 +1349,7 @@
       const dir = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : -1;
       const next = (idx + dir + all.length) % all.length;
       all[next].focus();
+      if (all[next].dataset.tab === "petisi") state.petisiId = "";
       setTab(all[next].dataset.tab);
     });
   });

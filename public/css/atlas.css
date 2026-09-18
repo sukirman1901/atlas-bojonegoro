@@ -1334,17 +1334,19 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  padding: 1.15rem 1.15rem 1.25rem;
-  box-shadow: var(--glass-shadow);
+  padding: 0.85rem 1rem 1.1rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-width: 0;
   height: auto;
   align-self: start;
+  /* Match Lapor .map-side-card — solid surface, no glass blur */
+  box-shadow: none;
 }
 .petisi-sign-title {
   margin: 0 0 0.85rem;
-  font-size: 1.0625rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -1445,7 +1447,7 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   border-radius: var(--radius);
   background: var(--surface);
   padding: 1rem;
-  box-shadow: var(--glass-shadow);
+  box-shadow: none;
 }
 .petisi-card.is-closed { opacity: 0.9; }
 .petisi-card-main { flex: 1 1 auto; min-width: 0; }
