@@ -849,6 +849,7 @@ html[data-theme="dark"] input[type="search"]::-webkit-search-cancel-button:hover
 #view-daftar,
 #view-kecamatan,
 #view-docs,
+#view-petisi,
 #view-lapor { padding-top: var(--page-top); }
 .lapor-page {
   width: 100%;
@@ -1244,25 +1245,39 @@ footer.site-footer,
 html[data-theme="dark"] .leaflet-tile-pane:not(.is-satellite) { filter: invert(1) hue-rotate(180deg) saturate(0.3); }
 html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
 
-.petisi-page { max-width: 40rem; }
-.petisi-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 0.35rem; letter-spacing: -0.03em; }
-.petisi-lead { margin: 0 0 1.25rem; }
-.petisi-item { border-top: 1px solid var(--line); padding: 1rem 0; }
-.petisi-item h2 { margin: 0 0 0.35rem; font-size: 1rem; font-weight: 600; }
-.petisi-meta { margin: 0 0 0.75rem; font-size: 0.8125rem; color: var(--muted); }
-.petisi-count { font-size: 2rem; font-weight: 600; letter-spacing: -0.04em; margin: 0.5rem 0 0.15rem; line-height: 1.1; }
-.petisi-link {
-  appearance: none; background: none; border: 0; padding: 0;
-  font: inherit; font-weight: 600; color: var(--fg); cursor: pointer;
-  text-align: left; text-decoration: underline; text-underline-offset: 0.15em;
+.petisi-page {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: 0;
+  padding-bottom: 1rem;
 }
-.petisi-link:hover { color: color-mix(in srgb, var(--fg) 75%, var(--muted)); }
-.petisi-page .form-grid { margin-top: 0.5rem; }
+.petisi-page .lapor-title { margin-bottom: 0.65rem; }
+.petisi-lead { margin: 0 0 1rem; }
+.petisi-hint { margin: 0.65rem 0 0; font-size: 0.8125rem; }
+.petisi-closed-label { margin: 1.5rem 0 0.5rem; font-size: 0.8125rem; }
+.petisi-back { margin: 0 0 1rem; }
+.petisi-summary { margin: 0 0 1rem; }
+.petisi-count {
+  font-size: 2rem; font-weight: 600; letter-spacing: -0.04em;
+  margin: 0.25rem 0 0.1rem; line-height: 1.1;
+}
+.petisi-count-label { margin: 0 0 0.85rem; }
+.petisi-target { margin: 0 0 1.25rem; }
+.petisi-page .form-grid { margin-top: 0.25rem; }
 .petisi-page select {
   width: 100%; min-height: var(--touch); padding: 0 0.75rem;
   border: 1px solid var(--line); border-radius: var(--radius-pill);
   background: var(--surface); color: var(--fg); font: inherit;
 }
 @media (max-width: 767px) {
-  .petisi-page .btn-primary { width: 100%; }
+  .table-petisi td[data-th="Petisi"] { grid-column: 1 / -1; grid-row: 1; }
+  .table-petisi td[data-th="Target"] { grid-column: 1; grid-row: 2; color: var(--muted); font-size: 0.8125rem; }
+  .table-petisi td[data-th="Terverifikasi"] { grid-column: 2; grid-row: 2; justify-self: end; }
+  .table-petisi td[data-th="Status"] { grid-column: 2; grid-row: 2; justify-self: end; color: var(--muted); font-size: 0.8125rem; }
+  .table-petisi td[data-th="Terverifikasi"]::before,
+  .table-petisi td[data-th="Target"]::before {
+    content: attr(data-th); display: block;
+    font-size: 0.65rem; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500;
+  }
 }

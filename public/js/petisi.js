@@ -69,34 +69,65 @@
       const open = rows.filter((c) => c.status === "open").slice(0, 3);
       const closed = rows.filter((c) => c.status === "closed");
       const counts = await Promise.all(open.map((c) => countVerified(c.id)));
-      const openHtml = open.length
-        ? open
-            .map((c, i) => {
-              const n = counts[i];
-              return `<article class="petisi-item">
-                <h2><button type="button" class="petisi-link" data-petisi-open="${esc(c.id)}">${esc(c.title)}</button></h2>
-                <p class="petisi-meta">${esc(c.target_label || "Petisi publik")} · <strong>${n}</strong> terverifikasi</p>
-                <button type="button" class="btn btn-primary" data-petisi-open="${esc(c.id)}">Tanda tangani</button>
-              </article>`;
-            })
-            .join("")
-        : `<p class="muted">Belum ada petisi aktif.</p>`;
-      const closedHtml = closed.length
-        ? `<div class="petisi-closed">
-            <p class="muted" style="margin:1.5rem 0 0.5rem">Ditutup</p>
-            ${closed
-              .map(
-                (c) => `<article class="petisi-item">
-              <h2><button type="button" class="petisi-link" data-petisi-open="${esc(c.id)}">${esc(c.title)}</button></h2>
-              <p class="petisi-meta">Ditutup</p>
-            </article>`
-              )
-              .join("")}
-          </div>`
-        : "";
-      root.innerHTML = openHtml + closedHtml;
-      root.querySelectorAll("[data-petisi-open]").forEach((btn) => {
-        btn.addEventListener("click", () => navigate(btn.getAttribute("data-petisi-open")));
+
+      if (!open.length && !closed.length) {
+        root.innerHTML = `<div class="table-wrap"><table><tbody><tr class="empty-row"><td>Belum ada petisi aktif.</td></tr></tbody></table></div>`;
+        return;
+      }
+
+      const openRows = open
+        .map((c, i) => {
+          const n = counts[i];
+          return `<tr data-petisi-open="${esc(c.id)}" tabindex="0">
+            <td data-th="Petisi" class="judul">${esc(c.title)}</td>
+            <td data-th="Target" class="muted">${esc(c.target_label || "—")}</td>
+            <td data-th="Terverifikasi" class="num">${n}</td>
+          </tr>`;
+        })
+        .join("");
+
+      let html = "";
+      if (open.length) {
+        html += `<div class="table-wrap table-cards table-petisi">
+          <table>
+            <thead><tr><th>Petisi</th><th>Target</th><th>Terverifikasi</th></tr></thead>
+            <tbody>${openRows}</tbody>
+          </table>
+        </div>
+        <p class="muted petisi-hint">Klik baris untuk membuka dan menandatangani.</p>`;
+      } else {
+        html += `<p class="muted">Belum ada petisi aktif.</p>`;
+      }
+
+      if (closed.length) {
+        const closedRows = closed
+          .map(
+            (c) => `<tr data-petisi-open="${esc(c.id)}" tabindex="0">
+            <td data-th="Petisi" class="judul">${esc(c.title)}</td>
+            <td data-th="Status" class="muted">Ditutup</td>
+            <td data-th="Target" class="muted">${esc(c.target_label || "—")}</td>
+          </tr>`
+          )
+          .join("");
+        html += `<p class="muted petisi-closed-label">Ditutup</p>
+          <div class="table-wrap table-cards table-petisi">
+            <table>
+              <thead><tr><th>Petisi</th><th>Status</th><th>Target</th></tr></thead>
+              <tbody>${closedRows}</tbody>
+            </table>
+          </div>`;
+      }
+
+      root.innerHTML = html;
+      root.querySelectorAll("[data-petisi-open]").forEach((tr) => {
+        const go = () => navigate(tr.getAttribute("data-petisi-open"));
+        tr.addEventListener("click", go);
+        tr.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            go();
+          }
+        });
       });
     } catch (err) {
       root.innerHTML = `<p class="error">Gagal memuat petisi. ${esc(err.message || err)}</p>`;
@@ -119,7 +150,7 @@
       if (error) throw error;
       if (!c) {
         root.innerHTML = `<p class="muted">Petisi tidak ditemukan.</p>
-          <button type="button" class="btn" data-petisi-back>Kembali</button>`;
+          <p><button type="button" class="btn" data-petisi-back>Kembali ke daftar</button></p>`;
         root.querySelector("[data-petisi-back]")?.addEventListener("click", () => navigate(""));
         return;
       }
@@ -149,18 +180,20 @@
               </label>
               <p class="form-msg" id="petisi-error" role="alert" hidden></p>
               <p class="form-msg form-msg-ok" id="petisi-ok" role="status" hidden></p>
-              <button class="btn btn-primary" type="submit">Kirim tautan verifikasi</button>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Kirim tautan verifikasi</button>
+              </div>
             </form>`
-          : `<p class="muted">Petisi ditutup. Total <strong>${n}</strong> tanda tangan terverifikasi.</p>`;
+          : `<p class="muted">Petisi ditutup. Total <strong class="num">${n}</strong> tanda tangan terverifikasi.</p>`;
 
       root.innerHTML = `
-        <p style="margin:0 0 1rem"><button type="button" class="btn" data-petisi-back>← Daftar petisi</button></p>
-        <h1 class="petisi-title">${esc(c.demand || c.title)}</h1>
-        <p class="muted">${esc(c.summary)}</p>
-        <p class="petisi-count">${n}</p>
-        <p class="muted" style="margin:0 0 1.25rem">tanda tangan terverifikasi</p>
-        <p class="muted" style="margin:0 0 1rem">Target: ${esc(c.target_label || "—")}${
-          c.isu_id ? ` · terkait isu #${esc(c.isu_id)}` : ""
+        <p class="petisi-back"><button type="button" class="btn" data-petisi-back>← Daftar petisi</button></p>
+        <h1 class="lapor-title">${esc(c.demand || c.title)}</h1>
+        <p class="muted petisi-summary">${esc(c.summary)}</p>
+        <p class="petisi-count num">${n}</p>
+        <p class="muted petisi-count-label">tanda tangan terverifikasi</p>
+        <p class="muted petisi-target">Target: ${esc(c.target_label || "—")}${
+          c.isu_id ? ` · isu #${esc(c.isu_id)}` : ""
         }</p>
         ${formBlock}`;
 
