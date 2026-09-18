@@ -161,6 +161,58 @@
     }
   }
 
+  function placeSelectList(btn, list) {
+    list.style.top = `${Math.round(btn.offsetHeight) + 8}px`;
+  }
+
+  function closePetisiSelects(scope) {
+    (scope || document).querySelectorAll(".petisi-sign .select-list").forEach((n) => {
+      n.hidden = true;
+      n.previousElementSibling?.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function bindPetisiKecSelect(host, options) {
+    if (!host) return;
+    const hidden = host.parentElement?.querySelector('input[name="kecamatan"]');
+    const labelledBy = "petisi-kec-label";
+    const valueId = "petisi-kec-value-label";
+    let value = hidden?.value || "";
+    const opts = [{ value: "", label: "—" }, ...(options || []).map((k) => ({ value: k, label: k }))];
+
+    function paint() {
+      const cur = opts.find((o) => o.value === value) || opts[0];
+      host.innerHTML = `<button type="button" class="select-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="${labelledBy} ${valueId}"><span class="select-btn-label" id="${valueId}">${esc(cur.label)}</span></button>
+        <div class="select-list" role="listbox" hidden>
+          ${opts
+            .map(
+              (o) =>
+                `<button type="button" role="option" data-value="${esc(o.value)}" aria-selected="${o.value === value}">${esc(o.label)}</button>`
+            )
+            .join("")}
+        </div>`;
+      const btn = host.querySelector(".select-btn");
+      const list = host.querySelector(".select-list");
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = list.hidden;
+        closePetisiSelects(host.closest(".petisi-sign") || document);
+        list.hidden = !open;
+        btn.setAttribute("aria-expanded", String(!list.hidden));
+        if (!list.hidden) placeSelectList(btn, list);
+      });
+      list.querySelectorAll("button").forEach((opt) => {
+        opt.addEventListener("click", (e) => {
+          e.stopPropagation();
+          value = opt.getAttribute("data-value") || "";
+          if (hidden) hidden.value = value;
+          paint();
+        });
+      });
+    }
+    paint();
+  }
+
   async function renderDetail(root, campaignId, navigate, kecamatanList) {
     if (!petisiEnabled()) {
       renderDisabled(root);
@@ -183,9 +235,6 @@
       }
       const n = await countVerified(c.id);
       const cover = "/assets/petisi/" + encodeURIComponent(c.slug) + ".jpg";
-      const kecOpts = (kecamatanList || [])
-        .map((k) => `<option value="${esc(k)}">${esc(k)}</option>`)
-        .join("");
       const formBlock =
         c.status === "open"
           ? `<form class="form-grid petisi-sign-form" id="form-petisi" novalidate>
@@ -199,13 +248,11 @@
                 <input id="petisi-email" name="email" type="email" required autocomplete="email">
                 <p class="field-error" id="petisi-email-err" hidden></p>
               </label>
-              <label class="field" for="petisi-kec">
-                <span class="field-label">Kecamatan (opsional)</span>
-                <select id="petisi-kec" name="kecamatan">
-                  <option value="">—</option>
-                  ${kecOpts}
-                </select>
-              </label>
+              <div class="field">
+                <span class="field-label" id="petisi-kec-label">Kecamatan (opsional)</span>
+                <div class="select" id="petisi-kec"></div>
+                <input type="hidden" name="kecamatan" id="petisi-kec-hidden" value="">
+              </div>
               <p class="hint petisi-sign-hint">Kami kirim tautan verifikasi ke email Anda.</p>
               <p class="form-msg" id="petisi-error" role="alert" hidden></p>
               <p class="form-msg form-msg-ok" id="petisi-ok" role="status" hidden></p>
@@ -217,47 +264,52 @@
 
       root.closest(".petisi-page")?.classList.add("is-detail");
       root.innerHTML = `
-        <p class="petisi-back"><button type="button" class="btn" data-petisi-back>← Daftar petisi</button></p>
         <article class="petisi-detail">
-          <figure class="petisi-hero">
-            <img src="${esc(cover)}" alt="${esc(c.title)}" width="1600" height="900" decoding="async" data-petisi-cover>
-          </figure>
-          <div class="petisi-detail-grid">
-            <div class="petisi-detail-copy">
-              <h1 class="petisi-detail-title">${esc(c.title)}</h1>
-              <p class="petisi-detail-summary">${esc(c.summary)}</p>
-              <p class="petisi-detail-demand">${esc(c.demand)}</p>
-              <div class="petisi-detail-meta">
-                <p class="petisi-count num">${n}</p>
-                <p class="muted petisi-count-label">tanda tangan terverifikasi</p>
-                <p class="muted petisi-target">Target: ${esc(c.target_label || "—")}${
-                  c.isu_id ? ` · isu #${esc(c.isu_id)}` : ""
-                }</p>
-              </div>
-              <div class="petisi-detail-share">
-                <button type="button" class="petisi-pill-btn" data-petisi-share="${esc(c.id)}" aria-label="Sebarkan" title="Sebarkan">${ICON_SHARE}<span>Sebarkan</span></button>
-              </div>
-            </div>
+          <div class="petisi-detail-top">
+            <figure class="petisi-hero">
+              <img src="${esc(cover)}" alt="${esc(c.title)}" width="1600" height="900" decoding="async" data-petisi-cover>
+            </figure>
             <aside class="petisi-sign" aria-labelledby="petisi-sign-heading">
               <h2 id="petisi-sign-heading" class="petisi-sign-title">Tanda tangan</h2>
               ${formBlock}
             </aside>
           </div>
+          <div class="petisi-detail-copy">
+            <h1 class="petisi-detail-title">${esc(c.title)}</h1>
+            <p class="petisi-detail-summary">${esc(c.summary)}</p>
+            <p class="petisi-detail-demand">${esc(c.demand)}</p>
+            <div class="petisi-detail-meta">
+              <p class="petisi-count num">${n}</p>
+              <p class="muted petisi-count-label">tanda tangan terverifikasi</p>
+              <p class="muted petisi-target">Target: ${esc(c.target_label || "—")}${
+                c.isu_id ? ` · isu #${esc(c.isu_id)}` : ""
+              }</p>
+            </div>
+            <div class="petisi-detail-share">
+              <button type="button" class="petisi-pill-btn" data-petisi-share="${esc(c.id)}" aria-label="Sebarkan" title="Sebarkan">${ICON_SHARE}<span>Sebarkan</span></button>
+            </div>
+          </div>
         </article>`;
 
       const coverImg = root.querySelector("[data-petisi-cover]");
       if (coverImg) {
-        coverImg.addEventListener("error", () => {
-          coverImg.src = "/assets/og/og-image.png";
-        }, { once: true });
+        coverImg.addEventListener(
+          "error",
+          () => {
+            coverImg.src = "/assets/og/og-image.png";
+          },
+          { once: true }
+        );
       }
-      root.querySelector("[data-petisi-back]")?.addEventListener("click", () => navigate(""));
+      bindPetisiKecSelect(root.querySelector("#petisi-kec"), kecamatanList || []);
       root.querySelector("[data-petisi-share]")?.addEventListener("click", () => sharePetisi(c));
       const form = root.querySelector("#form-petisi");
       if (form) {
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
-          await submitSign(c.id, form, () => renderDetail(root, campaignId, navigate, kecamatanList));
+          await submitSign(c.id, form, kecamatanList || [], () =>
+            renderDetail(root, campaignId, navigate, kecamatanList)
+          );
         });
       }
     } catch (err) {
@@ -266,10 +318,10 @@
     }
   }
 
-  async function submitSign(campaignId, form, onDone) {
+  async function submitSign(campaignId, form, kecamatanList, onDone) {
     const nama = form.querySelector("#petisi-nama");
     const email = form.querySelector("#petisi-email");
-    const kec = form.querySelector("#petisi-kec");
+    const kec = form.querySelector("#petisi-kec-hidden");
     const errBox = form.querySelector("#petisi-error");
     const okBox = form.querySelector("#petisi-ok");
     const namaErr = form.querySelector("#petisi-nama-err");
@@ -302,12 +354,13 @@
         campaign_id: campaignId,
         display_name: nama.value.trim(),
         email_normalized: em,
-        kecamatan: kec.value || null,
+        kecamatan: kec?.value || null,
         verified_at: null,
       });
       if (insErr) {
         if (insErr.code === "23505") {
-          errBox.textContent = "Email ini sudah terdaftar untuk petisi ini. Cek kotak masuk untuk tautan verifikasi, atau gunakan email lain.";
+          errBox.textContent =
+            "Email ini sudah terdaftar untuk petisi ini. Cek kotak masuk untuk tautan verifikasi, atau gunakan email lain.";
         } else {
           errBox.textContent = insErr.message || "Gagal menyimpan.";
         }
@@ -331,6 +384,9 @@
       okBox.textContent = "Cek email untuk mengonfirmasi tanda tangan.";
       okBox.hidden = false;
       form.reset();
+      const hidden = form.querySelector("#petisi-kec-hidden");
+      if (hidden) hidden.value = "";
+      bindPetisiKecSelect(form.querySelector("#petisi-kec"), kecamatanList || []);
     } catch (err) {
       errBox.textContent = err.message || "Terjadi kesalahan.";
       errBox.hidden = false;
