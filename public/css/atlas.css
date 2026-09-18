@@ -1269,14 +1269,12 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
 .petisi-page .form-grid { margin-top: 0.25rem; max-width: 36rem; }
 .petisi-page.is-detail .form-grid { max-width: none; margin-top: 0; }
 
-/* Detail: hero | sign form top-aligned, copy below */
-.petisi-detail { min-width: 0; }
-.petisi-detail-top {
+/* Detail: hero + copy left, sign form right (desktop); form after Sebarkan on mobile */
+.petisi-detail {
   display: grid;
   gap: 1.15rem;
   grid-template-columns: 1fr;
-  align-items: start;
-  margin-bottom: 1.35rem;
+  min-width: 0;
 }
 .petisi-hero {
   margin: 0;
@@ -1341,6 +1339,8 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: auto;
+  align-self: start;
 }
 .petisi-sign-title {
   margin: 0 0 0.85rem;
@@ -1348,10 +1348,13 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   font-weight: 600;
   letter-spacing: -0.02em;
 }
-.petisi-sign-hint { margin: 0; }
+.petisi-sign-hint {
+  margin: 0.15rem 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+}
 .petisi-sign-closed { margin: 0; }
 .petisi-sign-form {
-  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
@@ -1373,22 +1376,48 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   height: 1.05rem;
 }
 .petisi-sign .select { width: 100%; }
+.petisi-sign-form .field-check {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.65rem;
+  cursor: pointer;
+}
+.petisi-sign-form .field-check input[type="checkbox"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  min-width: 1.15rem;
+  margin: 0.15rem 0 0;
+  accent-color: var(--fg);
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+.petisi-sign-form .field-check span {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--fg);
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+}
 @media (min-width: 900px) {
-  .petisi-detail-top {
+  .petisi-detail {
     grid-template-columns: minmax(0, 1.45fr) minmax(17.5rem, 22rem);
-    gap: 1.75rem;
+    gap: 1.25rem 1.75rem;
     align-items: start;
   }
   .petisi-hero {
-    aspect-ratio: 16 / 9;
-    min-height: 0;
-    height: auto;
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .petisi-detail-copy {
+    grid-column: 1;
+    grid-row: 2;
   }
   .petisi-sign {
+    grid-column: 2;
+    grid-row: 1;
     position: sticky;
     top: calc(var(--header-h) + 0.85rem);
-    height: auto;
-    align-self: start;
   }
 }
 

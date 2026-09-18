@@ -253,7 +253,10 @@
                 <div class="select" id="petisi-kec"></div>
                 <input type="hidden" name="kecamatan" id="petisi-kec-hidden" value="">
               </div>
-              <p class="hint petisi-sign-hint">Kami kirim tautan verifikasi ke email Anda.</p>
+              <label class="field field-check" for="petisi-show-name">
+                <input id="petisi-show-name" name="show_name" type="checkbox" value="1">
+                <span>Cantumkan nama saya pada petisi</span>
+              </label>
               <p class="form-msg" id="petisi-error" role="alert" hidden></p>
               <p class="form-msg form-msg-ok" id="petisi-ok" role="status" hidden></p>
               <div class="form-actions">
@@ -265,15 +268,9 @@
       root.closest(".petisi-page")?.classList.add("is-detail");
       root.innerHTML = `
         <article class="petisi-detail">
-          <div class="petisi-detail-top">
-            <figure class="petisi-hero">
-              <img src="${esc(cover)}" alt="${esc(c.title)}" width="1600" height="900" decoding="async" data-petisi-cover>
-            </figure>
-            <aside class="petisi-sign" aria-labelledby="petisi-sign-heading">
-              <h2 id="petisi-sign-heading" class="petisi-sign-title">Tanda tangan</h2>
-              ${formBlock}
-            </aside>
-          </div>
+          <figure class="petisi-hero">
+            <img src="${esc(cover)}" alt="${esc(c.title)}" width="1600" height="900" decoding="async" data-petisi-cover>
+          </figure>
           <div class="petisi-detail-copy">
             <h1 class="petisi-detail-title">${esc(c.title)}</h1>
             <p class="petisi-detail-summary">${esc(c.summary)}</p>
@@ -289,6 +286,10 @@
               <button type="button" class="petisi-pill-btn" data-petisi-share="${esc(c.id)}" aria-label="Sebarkan" title="Sebarkan">${ICON_SHARE}<span>Sebarkan</span></button>
             </div>
           </div>
+          <aside class="petisi-sign" aria-labelledby="petisi-sign-heading">
+            <h2 id="petisi-sign-heading" class="petisi-sign-title">Tanda tangan</h2>
+            ${formBlock}
+          </aside>
         </article>`;
 
       const coverImg = root.querySelector("[data-petisi-cover]");
@@ -350,11 +351,13 @@
     const btn = form.querySelector('[type="submit"]');
     if (btn) btn.disabled = true;
     try {
+      const showName = !!form.querySelector("#petisi-show-name")?.checked;
       const { error: insErr } = await supabase.from("signatures").insert({
         campaign_id: campaignId,
         display_name: nama.value.trim(),
         email_normalized: em,
         kecamatan: kec?.value || null,
+        show_name: showName,
         verified_at: null,
       });
       if (insErr) {
