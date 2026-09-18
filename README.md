@@ -17,6 +17,7 @@ Warga yang ingin memahami isu di wilayahnya, dan redaksi yang menata serta memve
 - **Daftar** — inventaris isu dengan saringan dan skor prioritas (P1–P5).
 - **Kecamatan** — ringkasan hitungan per wilayah.
 - **Docs** — arti prioritas, tuduhan, verifikasi, matriks, dan cara lapor.
+- **Petisi** — max 3 petisi aktif dari isu prioritas; tanda tangan diverifikasi email.
 - **Lapor** — kirim kejadian ke antrian redaksi (bukan kanal darurat).
 
 Iklan portal yang ditolak redaksi tidak dihitung di warna peta.
@@ -40,7 +41,7 @@ Buka [http://127.0.0.1:4173/](http://127.0.0.1:4173/).
 
 Sunting [`data/isu.mjs`](data/isu.mjs) atau [`data/laporan.json`](data/laporan.json), lalu `node scripts/build.mjs`. Jangan sunting `public/data/isu.js` langsung.
 
-Alur verifikasi, laporan warga, dan aturan kode: [CONTRIBUTING.md](CONTRIBUTING.md).
+Alur verifikasi, laporan warga, petisi, dan aturan kode: [CONTRIBUTING.md](CONTRIBUTING.md). Setup backend petisi: [`supabase/README.md`](supabase/README.md).
 
 ## Lisensi
 

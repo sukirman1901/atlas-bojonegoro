@@ -26,7 +26,7 @@
     sosial: "Sosial",
     pengamplifikasi: "Pengamplifikasi",
   };
-  const TABS = ["peta", "daftar", "kecamatan", "docs", "lapor"];
+  const TABS = ["peta", "daftar", "kecamatan", "docs", "petisi", "lapor"];
   const BELUM_DIPETAKAN = "__belum__";
 
   const QK = {
@@ -39,6 +39,7 @@
     sort: "sort",
     id: "id",
     matrix: "matrix",
+    petisi: "petisi",
   };
 
   const params = new URLSearchParams(location.search);
@@ -52,6 +53,7 @@
     sort: params.get(QK.sort) || "prioritas",
     id: params.get(QK.id) ? Number(params.get(QK.id)) : null,
     matrix: params.get(QK.matrix) === "1",
+    petisiId: params.get(QK.petisi) || "",
     kecQ: "",
   };
 
@@ -154,6 +156,7 @@
     if (state.sort !== "prioritas") p.set(QK.sort, state.sort);
     if (state.id) p.set(QK.id, String(state.id));
     if (state.matrix) p.set(QK.matrix, "1");
+    if (state.tab === "petisi" && state.petisiId) p.set(QK.petisi, state.petisiId);
     const qs = p.toString();
     history.replaceState(null, "", qs ? "?" + qs : location.pathname);
   }
@@ -509,6 +512,12 @@
         "Kirim laporan warga ke antrian redaksi Atlas Bojonegoro. Bukan kanal darurat atau polisi; jangan tulis data pribadi.",
       path: "/?tab=lapor",
     },
+    petisi: {
+      title: "Atlas Bojonegoro — Petisi",
+      description:
+        "Petisi publik terbatas dari isu prioritas. Tanda tangan diverifikasi email; maksimal tiga petisi aktif.",
+      path: "/?tab=petisi",
+    },
   };
 
   function setMetaContent(selector, content) {
@@ -756,11 +765,24 @@
         <dt>Tanggal</dt><dd>${esc(tanggal(i.tanggal))}${i.tanggal_jenis ? " · " + esc(i.tanggal_jenis) : ""}</dd>
         <dt>Sumber</dt><dd>${i.url ? `<a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.sumber)}</a>` : esc(i.sumber)}</dd>
         <dt>Catatan</dt><dd>${esc(i.catatan || "—")}</dd>
+        <dt class="petisi-drawer-slot" hidden>Petisi</dt><dd class="petisi-drawer-slot" hidden></dd>
       </dl>`;
     el.drawer.querySelector(".close").addEventListener("click", closeDrawer);
     el.drawer.querySelector(".close").focus();
     void el.drawerRoot.offsetWidth;
     el.drawerRoot.classList.add("is-open");
+    if (window.Petisi?.findByIsuId) {
+      window.Petisi.findByIsuId(i.id)
+        .then((camp) => {
+          if (!camp || state.id !== id) return;
+          const slots = el.drawer.querySelectorAll(".petisi-drawer-slot");
+          if (slots.length < 2) return;
+          slots[0].hidden = false;
+          slots[1].hidden = false;
+          slots[1].innerHTML = `<a href="?tab=petisi&petisi=${encodeURIComponent(camp.id)}">Ada petisi terkait</a>`;
+        })
+        .catch(() => {});
+    }
   }
 
   function closeDrawer() {
@@ -1284,6 +1306,21 @@
       }
     }
     if (state.tab === "daftar") refreshDaftar(true);
+    if (state.tab === "petisi") refreshPetisi();
+  }
+
+  function refreshPetisi() {
+    const root = document.getElementById("petisi-root");
+    if (!root || !window.Petisi?.render) return;
+    window.Petisi.render(root, {
+      petisiId: state.petisiId || "",
+      kecamatanList: KECAMATAN,
+      navigate(id) {
+        state.petisiId = id || "";
+        writeUrl();
+        refreshPetisi();
+      },
+    });
   }
 
   document.addEventListener("click", (e) => {

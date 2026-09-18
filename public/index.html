@@ -90,7 +90,7 @@
       } catch (e) {}
     })();
   </script>
-  <link rel="stylesheet" href="/css/atlas.css?v=map-z">
+  <link rel="stylesheet" href="/css/atlas.css?v=petisi">
 </head>
 <body>
   <a class="skip" href="#isi">Lewati ke isi</a>
@@ -112,6 +112,7 @@
             <button class="tab" role="tab" id="tab-daftar" aria-controls="view-daftar" aria-selected="false" data-tab="daftar" type="button">Daftar</button>
             <button class="tab" role="tab" id="tab-kecamatan" aria-controls="view-kecamatan" aria-selected="false" data-tab="kecamatan" type="button">Kecamatan</button>
             <button class="tab" role="tab" id="tab-docs" aria-controls="view-docs" aria-selected="false" data-tab="docs" type="button">Docs</button>
+            <button class="tab" role="tab" id="tab-petisi" aria-controls="view-petisi" aria-selected="false" data-tab="petisi" type="button">Petisi</button>
             <button class="tab" role="tab" id="tab-lapor" aria-controls="view-lapor" aria-selected="false" data-tab="lapor" type="button">Lapor</button>
           </div>
           <div class="nav-util" aria-label="Tautan proyek">
@@ -183,6 +184,7 @@
         <a class="rail-link" href="#doc-matriks">Matriks</a>
         <p class="rail-group">Ikut serta</p>
         <a class="rail-link" href="#doc-lapor">Cara lapor</a>
+        <a class="rail-link" href="#doc-petisi">Petisi</a>
         <a class="rail-link" href="#doc-sumber">Sumber &amp; batas</a>
       </div>
     </aside>
@@ -326,12 +328,26 @@
               <p>Ini bukan kanal darurat, polisi, atau pemadam kebakaran. Jangan tulis data pribadi.</p>
             </section>
 
+            <section class="docs-section" id="doc-petisi">
+              <h2>Petisi</h2>
+              <p>Tab <strong>Petisi</strong> menampung maksimal tiga petisi aktif yang dipilih redaksi dari isu prioritas (P1). Ini bukan Change.org penuh, dan berbeda dari <strong>Lapor</strong> (lapor = kirim kejadian baru; petisi = mendukung tuntutan yang sudah disusun).</p>
+              <p>Tanda tangan diverifikasi lewat email. Satu email = satu suara per petisi. Atlas tidak mengklaim verifikasi KTP.</p>
+            </section>
+
             <section class="docs-section" id="doc-sumber">
               <h2>Sumber data &amp; batas atlas</h2>
               <p>Data dimasukkan manusia ke repositori dari sumber terbuka (media, pengumuman, laporan warga yang lolos redaksi). Bukan crawler yang menarik berita sendiri.</p>
               <p>Inventaris aktif dibatasi <strong>satu bulan terakhir</strong> (lihat <a href="#doc-periode">Periode isu</a>). Atlas membantu memantau isu publik. Bukan pengganti laporan polisi atau saluran resmi pemerintah untuk pengaduan darurat.</p>
             </section>
           </article>
+        </section>
+
+        <section class="view" id="view-petisi" role="tabpanel" aria-labelledby="tab-petisi" hidden inert>
+          <div class="petisi-page">
+            <h1 class="petisi-title">Petisi</h1>
+            <p class="muted petisi-lead">Maksimal 3 petisi aktif. Tanda tangan diverifikasi email.</p>
+            <div id="petisi-root"></div>
+          </div>
         </section>
 
         <section class="view" id="view-lapor" role="tabpanel" aria-labelledby="tab-lapor" hidden inert>
@@ -397,6 +413,7 @@
             <li><a href="#doc-verifikasi">Status verifikasi</a></li>
             <li><a href="#doc-matriks">Matriks prioritas</a></li>
             <li><a href="#doc-lapor">Cara lapor</a></li>
+            <li><a href="#doc-petisi">Petisi</a></li>
             <li><a href="#doc-sumber">Sumber data &amp; batas atlas</a></li>
           </ul>
         </nav>
@@ -421,6 +438,9 @@
 
   <script src="/data/isu.js?v=kirim-lapor"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="/js/app.js?v=map-light-esri"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/petisi-config.js?v=1"></script>
+  <script src="/js/petisi.js?v=1"></script>
+  <script src="/js/app.js?v=petisi"></script>
 </body>
 </html>

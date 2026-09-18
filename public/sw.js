@@ -1,10 +1,12 @@
 /* Atlas Bojonegoro — lightweight shell cache. Map tiles & API stay network. */
-const CACHE = "atlas-shell-v7";
+const CACHE = "atlas-shell-v8";
 const PRECACHE = [
   "/",
   "/index.html",
   "/css/atlas.css",
   "/js/app.js",
+  "/js/petisi.js",
+  "/js/petisi-config.js",
   "/manifest.webmanifest",
   "/assets/icons/favicon.svg",
   "/assets/icons/favicon-32.png",
