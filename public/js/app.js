@@ -26,7 +26,7 @@
     sosial: "Sosial",
     pengamplifikasi: "Pengamplifikasi",
   };
-  const TABS = ["peta", "daftar", "kecamatan", "docs", "petisi", "lapor"];
+  const TABS = ["peta", "daftar", "kecamatan", "petisi", "docs", "lapor"];
   const BELUM_DIPETAKAN = "__belum__";
 
   const QK = {
