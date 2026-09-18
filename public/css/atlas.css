@@ -1412,6 +1412,9 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   .petisi-hero {
     grid-column: 1;
     grid-row: 1;
+    /* Desktop: wide strip beside the form — ~form height, not 16:9 tower */
+    aspect-ratio: 2.4 / 1;
+    max-height: 14rem;
   }
   .petisi-detail-copy {
     grid-column: 1;
