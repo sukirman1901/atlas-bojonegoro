@@ -1359,7 +1359,7 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
 .petisi-sign-form .form-actions {
   justify-content: stretch;
   padding-top: 0.15rem;
-  margin-top: auto;
+  margin-top: 0;
 }
 .petisi-sign-form .form-actions .btn-primary {
   width: 100%;
@@ -1377,16 +1377,18 @@ html[data-theme="dark"] .leaflet-tile-pane.is-satellite { filter: none; }
   .petisi-detail-top {
     grid-template-columns: minmax(0, 1.45fr) minmax(17.5rem, 22rem);
     gap: 1.75rem;
-    align-items: stretch;
+    align-items: start;
   }
   .petisi-hero {
-    aspect-ratio: auto;
-    min-height: 100%;
-    height: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    height: auto;
   }
   .petisi-sign {
     position: sticky;
     top: calc(var(--header-h) + 0.85rem);
+    height: auto;
+    align-self: start;
   }
 }
 
