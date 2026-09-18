@@ -58,6 +58,57 @@
     root.innerHTML = `<p class="muted">Petisi belum dihubungkan ke backend. Isi <code>petisi-config.js</code> setelah project Supabase siap (lihat <code>supabase/README.md</code>).</p>`;
   }
 
+  const ICON_LOVE =
+    '<svg class="petisi-action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20.5s-7.25-4.35-7.25-9.1A4.15 4.15 0 0 1 12 7.55a4.15 4.15 0 0 1 7.25 3.85C19.25 16.15 12 20.5 12 20.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+  const ICON_SHARE =
+    '<svg class="petisi-action-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function petisiUrl(id) {
+    return window.location.origin + "/?tab=petisi&petisi=" + encodeURIComponent(id);
+  }
+
+  async function sharePetisi(c) {
+    const url = petisiUrl(c.id);
+    const title = c.title || "Petisi Atlas Bojonegoro";
+    const text = c.summary || c.demand || title;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, text, url });
+        return;
+      }
+    } catch (e) {
+      if (e && e.name === "AbortError") return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      window.alert("Tautan petisi disalin.");
+    } catch (e) {
+      window.prompt("Salin tautan petisi:", url);
+    }
+  }
+
+  function cardActions(c, closed) {
+    if (closed) {
+      return `<div class="petisi-card-actions" role="group" aria-label="Aksi petisi">
+        <button type="button" class="btn" data-petisi-open="${esc(c.id)}">Lihat</button>
+        <button type="button" class="btn" data-petisi-share="${esc(c.id)}">${ICON_SHARE}<span>Sebarkan</span></button>
+      </div>`;
+    }
+    return `<div class="petisi-card-actions" role="group" aria-label="Aksi petisi">
+      <button type="button" class="btn btn-primary" data-petisi-open="${esc(c.id)}">${ICON_LOVE}<span>Tanda tangan</span></button>
+      <button type="button" class="btn" data-petisi-share="${esc(c.id)}">${ICON_SHARE}<span>Sebarkan</span></button>
+    </div>`;
+  }
+
+  function campaignCard(c, n, closed) {
+    return `<article class="petisi-card${closed ? " is-closed" : ""}">
+      <h2 class="petisi-card-title">${esc(c.title)}</h2>
+      <p class="petisi-card-desc">${esc(c.summary || c.demand)}</p>
+      <p class="petisi-card-meta"><span class="num">${n ?? "—"}</span> terverifikasi · ${esc(c.target_label || "Petisi publik")}${closed ? " · Ditutup" : ""}</p>
+      ${cardActions(c, closed)}
+    </article>`;
+  }
+
   async function renderList(root, navigate) {
     if (!petisiEnabled()) {
       renderDisabled(root);
@@ -69,64 +120,35 @@
       const open = rows.filter((c) => c.status === "open").slice(0, 3);
       const closed = rows.filter((c) => c.status === "closed");
       const counts = await Promise.all(open.map((c) => countVerified(c.id)));
+      const closedCounts = await Promise.all(closed.map((c) => countVerified(c.id)));
 
       if (!open.length && !closed.length) {
-        root.innerHTML = `<div class="table-wrap"><table><tbody><tr class="empty-row"><td>Belum ada petisi aktif.</td></tr></tbody></table></div>`;
+        root.innerHTML = `<p class="muted">Belum ada petisi aktif.</p>`;
         return;
       }
 
-      const openRows = open
-        .map((c, i) => {
-          const n = counts[i];
-          return `<tr data-petisi-open="${esc(c.id)}" tabindex="0">
-            <td data-th="Petisi" class="judul">${esc(c.title)}</td>
-            <td data-th="Target" class="muted">${esc(c.target_label || "—")}</td>
-            <td data-th="Terverifikasi" class="num">${n}</td>
-          </tr>`;
-        })
-        .join("");
-
       let html = "";
       if (open.length) {
-        html += `<div class="table-wrap table-cards table-petisi">
-          <table>
-            <thead><tr><th>Petisi</th><th>Target</th><th>Terverifikasi</th></tr></thead>
-            <tbody>${openRows}</tbody>
-          </table>
-        </div>
-        <p class="muted petisi-hint">Klik baris untuk membuka dan menandatangani.</p>`;
+        html += `<div class="petisi-card-list">${open.map((c, i) => campaignCard(c, counts[i], false)).join("")}</div>`;
       } else {
         html += `<p class="muted">Belum ada petisi aktif.</p>`;
       }
-
       if (closed.length) {
-        const closedRows = closed
-          .map(
-            (c) => `<tr data-petisi-open="${esc(c.id)}" tabindex="0">
-            <td data-th="Petisi" class="judul">${esc(c.title)}</td>
-            <td data-th="Status" class="muted">Ditutup</td>
-            <td data-th="Target" class="muted">${esc(c.target_label || "—")}</td>
-          </tr>`
-          )
-          .join("");
         html += `<p class="muted petisi-closed-label">Ditutup</p>
-          <div class="table-wrap table-cards table-petisi">
-            <table>
-              <thead><tr><th>Petisi</th><th>Status</th><th>Target</th></tr></thead>
-              <tbody>${closedRows}</tbody>
-            </table>
-          </div>`;
+          <div class="petisi-card-list">${closed.map((c, i) => campaignCard(c, closedCounts[i], true)).join("")}</div>`;
       }
 
       root.innerHTML = html;
-      root.querySelectorAll("[data-petisi-open]").forEach((tr) => {
-        const go = () => navigate(tr.getAttribute("data-petisi-open"));
-        tr.addEventListener("click", go);
-        tr.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            go();
-          }
+      const byId = Object.fromEntries(rows.map((c) => [c.id, c]));
+      root.querySelectorAll("[data-petisi-open]").forEach((btn) => {
+        btn.addEventListener("click", () => navigate(btn.getAttribute("data-petisi-open")));
+      });
+      root.querySelectorAll("[data-petisi-share]").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.getAttribute("data-petisi-share");
+          const c = byId[id];
+          if (c) sharePetisi(c);
         });
       });
     } catch (err) {
